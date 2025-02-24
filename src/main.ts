@@ -20,7 +20,7 @@ async function bootstrap() {
 
   // swagger
   const config = new DocumentBuilder()
-    .setTitle('Conseil de Cycle')
+    .setTitle('Chalet le Gypaete')
     .setDescription('API')
     .setVersion('1.0')
     .addBearerAuth()

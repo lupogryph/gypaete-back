@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Dropbox } from 'dropbox';
-import { DbxEntity } from './dbx.entity';
+import { DbxEntity } from './entities/dbx.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cron } from '@nestjs/schedule';
