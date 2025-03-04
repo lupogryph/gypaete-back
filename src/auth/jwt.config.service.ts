@@ -4,6 +4,7 @@ import { JwtModuleOptions, JwtOptionsFactory } from '@nestjs/jwt';
 
 interface JwtConfig {
   secret: string;
+  salt: string;
   expiresIn: string;
 }
 

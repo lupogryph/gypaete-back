@@ -5,28 +5,29 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import {JwtConfigService} from "./jwt.config.service";
 
 @Injectable()
 export class AuthService {
   constructor(
-    private jwtService: JwtService,
+    private jwt: JwtService,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
-    private configService: ConfigService,
+    private repository: Repository<User>,
+    private readonly config: JwtConfigService,
   ) {}
 
   async connecter(
     email: string,
     password: string,
   ): Promise<{ access_token: string }> {
-    const user = await this.userRepository.findOneBy({ email: email });
+    const user = await this.repository.findOneBy({ email: email });
     if (user == null || !user.activated) throw new UnauthorizedException("Utilisateur non existant ou non activé par l'administrateur");
     const db_hash = Buffer.from(user.password, 'hex');
-    const salt = this.configService.get<string>('jwt.salt');
+    const salt = this.config.jwtConfig.salt;
     const hash = crypto.scryptSync(password, salt, 24);
     if (crypto.timingSafeEqual(db_hash, hash)) {
       return {
-        access_token: await this.jwtService.signAsync({
+        access_token: await this.jwt.signAsync({
           sub: user.id,
           email: user.email,
           role: user.role,

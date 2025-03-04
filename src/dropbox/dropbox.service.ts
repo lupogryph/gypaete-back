@@ -5,16 +5,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cron } from '@nestjs/schedule';
 import { HttpService } from '@nestjs/axios';
-import { authConstants } from '../auth/auth.constants';
 import { RefreshResponse } from './dto/refresh.response.dto';
 import fetch from 'node-fetch';
+import {ConfigService} from "@nestjs/config";
+import {DropboxConfigService} from "./dropbox.config.service";
 
 @Injectable()
 export class DropboxService {
     constructor(
         @InjectRepository(DbxEntity)
-        private dbxRepository: Repository<DbxEntity>,
-        private readonly httpService: HttpService,
+        private repository: Repository<DbxEntity>,
+        private readonly http: HttpService,
+        private readonly config: DropboxConfigService,
       ) {}
 
     async upload(path: string, file: Buffer): Promise<string> {
@@ -50,7 +52,7 @@ export class DropboxService {
     }
 
     async getTokens() {
-        const dbxLines = await this.dbxRepository.find({select: {token: true}});
+        const dbxLines = await this.repository.find({select: {token: true}});
         const dbxLine = dbxLines[0];
         if (dbxLine == null) {
             throw new InternalServerErrorException('dbx token not found');
@@ -61,18 +63,18 @@ export class DropboxService {
     //@Cron('*/1 * * * *')
     @Cron('*/50 * * * *')
     refresh() {
-        this.dbxRepository.findOneBy({id: 1})
+        this.repository.findOneBy({id: 1})
         .then(dbx => {
             const params = new URLSearchParams();
             params.append('refresh_token', dbx.refresh);
             params.append('grant_type', 'refresh_token');
-            params.append('client_id', authConstants.dbx.key);
-            params.append('client_secret', authConstants.dbx.secret);
-            this.httpService.post<RefreshResponse>('https://api.dropbox.com/oauth2/token', params)
+            params.append('client_id', this.config.dropbox.key);
+            params.append('client_secret', this.config.dropbox.secret);
+            this.http.post<RefreshResponse>('https://api.dropbox.com/oauth2/token', params)
                 .subscribe({
                     next: (refreshResponse) => {
                         dbx.token = refreshResponse.data.access_token;
-                        this.dbxRepository.save(dbx)
+                        this.repository.save(dbx)
                             .then(() => console.log('token refreshed'));
                     },
                     error: (error) => console.log(error)
