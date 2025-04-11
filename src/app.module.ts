@@ -8,6 +8,7 @@ import databaseConfig from './config/database.config';
 import { TypeOrmConfigService } from './typeorm.config.service';
 import jwtConfig from './auth/jwt.config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ChaletModule } from './chalet/chalet.module';
 import dropboxConfig from "./dropbox/dropbox.config";
 
 @Module({
@@ -20,8 +21,8 @@ import dropboxConfig from "./dropbox/dropbox.config";
     AuthModule,
     UserModule,
     MeetingModule,
+    ChaletModule,
   ],
-  controllers: [],
   providers: [
     { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor },
   ],

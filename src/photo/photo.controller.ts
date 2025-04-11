@@ -2,6 +2,7 @@ import { Controller, Param, Request, Put, UploadedFile, UseInterceptors, Get, De
 import { PhotoService } from './photo.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
+import { Express } from 'express';
 import { FileService } from '../dropbox/file.service';
 import { Categorie } from './entities/photo.entity';
 
@@ -14,7 +15,7 @@ export class PhotoController {
   create(
     @Request() req,
     @Param('categorie') categorie: Categorie,
-    @UploadedFile() file: Express.Multer.File
+    @UploadedFile() file?: Express.Multer.File
   ) {
     const ext = this.fileService.getExt(file.originalname);
     return this.photoService.create(req.user.sub, categorie, file.buffer, ext);

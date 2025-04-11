@@ -1,5 +1,4 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { InviteEntity } from '../../invite/entities/invite.entity';
 
 export type Categorie = 'REGARD_TENDRE'| 'CRAVATTE'| 'EMBRASSENT'| 'AMOUREUX'| 'DERNIER_VERRE'| 'COIFFURE'| 'PREMIERE_DANSE'| 'GROS_CALIN'| 'GATEAU'| 'GROUPE'| 'GRIMACE'| 'ENFANTS'| 'SELFIE'| 'PIRE_DANSEUR'| 'PARENTS';
 
