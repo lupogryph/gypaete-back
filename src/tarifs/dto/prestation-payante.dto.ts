@@ -1,5 +1,5 @@
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
-import {FrEn} from "../../fren";
+import {FrEn} from "../../i18n/fren";
 
 export class PrestationPayanteDto {
 

@@ -1,5 +1,5 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import {FrEn} from "../../fren";
+import {FrEn} from "../../i18n/fren";
 
 @Entity("prestationPayante")
 export class PrestationPayanteEntity {

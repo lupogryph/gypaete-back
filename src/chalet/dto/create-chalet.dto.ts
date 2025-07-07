@@ -1,7 +1,7 @@
 import {ApiProperty} from "@nestjs/swagger";
 import {IsNotEmpty} from "class-validator";
 import {PrestationPayanteDto} from "../../tarifs/dto/prestation-payante.dto";
-import {FrEn} from "../../fren";
+import {FrEn} from "../../i18n/fren";
 
 export class CreateChaletDto {
 

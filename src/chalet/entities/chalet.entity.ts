@@ -1,7 +1,7 @@
 import {Column, Entity, OneToMany, PrimaryColumn} from "typeorm";
 import {PhotoEntity} from "../../photo/entities/photo.entity";
 import {PrestationPayanteEntity} from "../../tarifs/entities/prestation-payante.entity";
-import {FrEn} from "../../fren";
+import {FrEn} from "../../i18n/fren";
 
 @Entity("chalet")
 export class ChaletEntity {
