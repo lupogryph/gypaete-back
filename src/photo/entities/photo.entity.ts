@@ -1,27 +1,20 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
-
-export type Categorie = 'REGARD_TENDRE'| 'CRAVATTE'| 'EMBRASSENT'| 'AMOUREUX'| 'DERNIER_VERRE'| 'COIFFURE'| 'PREMIERE_DANSE'| 'GROS_CALIN'| 'GATEAU'| 'GROUPE'| 'GRIMACE'| 'ENFANTS'| 'SELFIE'| 'PIRE_DANSEUR'| 'PARENTS';
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique} from 'typeorm';
+import {ChaletEntity} from "../../chalet/entities/chalet.entity";
 
 @Entity("photo")
 @Unique(['invite', 'categorie'])
 export class PhotoEntity {
+
     @PrimaryGeneratedColumn('uuid')
     id: string;
-
-    @Column({
-        type: 'enum',
-        enum: ['REGARD_TENDRE', 'CRAVATTE', 'EMBRASSENT', 'AMOUREUX', 'DERNIER_VERRE', 'COIFFURE', 'PREMIERE_DANSE', 'GROS_CALIN', 'GATEAU', 'GROUPE', 'GRIMACE', 'ENFANTS', 'SELFIE', 'PIRE_DANSEUR', 'PARENTS'],
-        default: 'REGARD_TENDRE',
-    })
-    categorie: Categorie;
 
     @Column()
     url: string;
 
     @Column()
-    dbxpath: string;
+    thumbnailUrl: string;
 
-    @ManyToOne(() => InviteEntity, invite => invite.id)
-    invite: InviteEntity;
+    @ManyToOne(() => ChaletEntity, c => c.nom)
+    chalet: ChaletEntity;
 
 }

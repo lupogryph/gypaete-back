@@ -1,50 +1,35 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
-import { Exclude } from 'class-transformer';
-import { Role } from 'src/auth/roles.enum';
-import { Meeting } from 'src/meeting/entities/meeting.entity';
+import {Column, Entity, PrimaryGeneratedColumn, Unique,} from 'typeorm';
+import {Exclude} from 'class-transformer';
+import {Role} from 'src/auth/roles.enum';
 
 @Entity('user')
 @Unique(['email'])
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
 
-  @Column()
-  email: string;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  firstName: string;
+    @Column()
+    email: string;
 
-  @Column()
-  name: string;
+    @Column()
+    prenom: string;
 
-  @Exclude()
-  @Column()
-  password: string;
+    @Column()
+    nom: string;
 
-  @Column({
-    type: 'enum',
-    enum: Role,
-    default: Role.USER,
-  })
-  role: Role;
+    @Exclude()
+    @Column()
+    mdp: string;
 
-  @Column()
-  activated: boolean;
+    @Column({
+        type: 'enum',
+        enum: Role,
+        default: Role.USER,
+    })
+    role: Role;
 
-  @OneToMany(() => Meeting, (meeting) => meeting.createdBy)
-  createdMeetings: Meeting[];
-
-  @OneToMany(() => Meeting, (meeting) => meeting.updatedBy)
-  updatedMeetings: Meeting[];
-
-  constructor(partial: Partial<User>) {
-    Object.assign(this, partial);
-  }
+    constructor(partial: Partial<User>) {
+        Object.assign(this, partial);
+    }
 }

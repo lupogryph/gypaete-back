@@ -21,8 +21,8 @@ export class AuthService {
     password: string,
   ): Promise<{ access_token: string }> {
     const user = await this.repository.findOneBy({ email: email });
-    if (user == null || !user.activated) throw new UnauthorizedException("Utilisateur non existant ou non activé par l'administrateur");
-    const db_hash = Buffer.from(user.password, 'hex');
+    if (user == null) throw new UnauthorizedException("Erreur A01");
+    const db_hash = Buffer.from(user.mdp, 'hex');
     const salt = this.config.jwtConfig.salt;
     const hash = crypto.scryptSync(password, salt, 24);
     if (crypto.timingSafeEqual(db_hash, hash)) {
