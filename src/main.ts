@@ -4,8 +4,6 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import {ApiConfigService} from "./config/api.config.service";
 
-const SERVER_PORT = process.env.PORT || 1337;
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const apiConfig = app.get(ApiConfigService).apiConfig;
