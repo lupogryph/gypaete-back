@@ -1,6 +1,6 @@
-import {IsEmail, MaxLength} from 'class-validator';
-import {ApiPropertyOptional} from '@nestjs/swagger';
-import {Role} from 'src/auth/roles.enum';
+import {IsEmail, MaxLength} from "class-validator";
+import {ApiPropertyOptional} from "@nestjs/swagger";
+import {Role} from "../../auth/roles.enum";
 
 export class UserDto {
 

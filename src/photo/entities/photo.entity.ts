@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique} from 'typeorm';
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {ChaletEntity} from "../../chalet/entities/chalet.entity";
 
 @Entity("photo")

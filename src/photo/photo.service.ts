@@ -1,16 +1,17 @@
-import {Injectable, InternalServerErrorException} from '@nestjs/common';
-import {PhotoEntity} from './entities/photo.entity';
-import {InjectRepository} from '@nestjs/typeorm';
+import {Injectable, InternalServerErrorException} from "@nestjs/common";
+import {PhotoEntity} from "./entities/photo.entity";
+import {InjectRepository} from "@nestjs/typeorm";
 import {Jimp} from "jimp";
 import {Repository} from "typeorm";
-import {ApiConfigService} from "../config/api.config.service";
+import {AppConfigService} from "../config/app.config.service";
 
 @Injectable()
 export class PhotoService {
+
     constructor(
         @InjectRepository(PhotoEntity)
         private photoRepository: Repository<PhotoEntity>,
-        private readonly config: ApiConfigService,
+        private readonly config: AppConfigService,
     ) {
     }
 

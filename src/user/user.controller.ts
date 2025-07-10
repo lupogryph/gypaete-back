@@ -1,10 +1,10 @@
-import {Body, Controller, Delete, Get, Patch, Post, Request,} from '@nestjs/common';
-import {UserService} from './user.service';
-import {CreateUserDto} from './dto/create-user.dto';
-import {UpdateUserDto} from './dto/update-user.dto';
-import {Public} from 'src/auth/public.decorator';
-import {ApiBearerAuth, ApiOkResponse, ApiTags} from '@nestjs/swagger';
-import {UserDto} from './dto/user.dto';
+import {Body, Controller, Delete, Get, Patch, Post, Request,} from "@nestjs/common";
+import {UserService} from "./user.service";
+import {CreateUserDto} from "./dto/create-user.dto";
+import {UpdateUserDto} from "./dto/update-user.dto";
+import {ApiBearerAuth, ApiOkResponse, ApiTags} from "@nestjs/swagger";
+import {UserDto} from "./dto/user.dto";
+import {Public} from "../auth/public.decorator";
 
 @ApiBearerAuth()
 @ApiTags('user')

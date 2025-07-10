@@ -1,29 +1,15 @@
-import {
-    Controller,
-    Get,
-    Post,
-    Body,
-    Patch,
-    Param,
-    Delete,
-    UseInterceptors,
-    Put,
-    Request,
-    UploadedFile
-} from '@nestjs/common';
-import {ChaletService} from './chalet.service';
-import {CreateChaletDto} from './dto/create-chalet.dto';
-import {UpdateChaletDto} from './dto/update-chalet.dto';
+import {Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UseInterceptors} from "@nestjs/common";
+import {ChaletService} from "./chalet.service";
+import {CreateChaletDto} from "./dto/create-chalet.dto";
+import {UpdateChaletDto} from "./dto/update-chalet.dto";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {memoryStorage} from "multer";
 import {Express} from "express";
-import {PhotoService} from "../photo/photo.service";
 
 @Controller('chalet')
 export class ChaletController {
     constructor(
         private readonly chaletService: ChaletService,
-        private readonly photoService: PhotoService
     ) {
     }
 
@@ -55,7 +41,6 @@ export class ChaletController {
     @UseInterceptors(FileInterceptor('file', {storage: memoryStorage()}))
     @Put('/:nom/photo')
     createForChalet(
-        @Request() req,
         @Param('nom') nom: string,
         @UploadedFile() file: Express.Multer.File
     ) {

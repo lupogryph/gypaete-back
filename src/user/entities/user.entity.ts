@@ -1,6 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn, Unique,} from 'typeorm';
-import {Exclude} from 'class-transformer';
-import {Role} from 'src/auth/roles.enum';
+import {Column, Entity, PrimaryGeneratedColumn, Unique,} from "typeorm";
+import {Exclude} from "class-transformer";
+import {Role} from "../../auth/roles.enum";
 
 @Entity('user')
 @Unique(['email'])

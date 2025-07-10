@@ -6,7 +6,7 @@ export class AnimalEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'json' })
+    @Column({type: 'json'})
     condition: Map<'fr' | 'en', string>[];
 
     @Column()

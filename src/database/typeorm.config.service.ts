@@ -1,7 +1,7 @@
-import {Injectable} from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {TypeOrmModuleOptions, TypeOrmOptionsFactory} from '@nestjs/typeorm';
-import {User} from '../user/entities/user.entity';
+import {Injectable} from "@nestjs/common";
+import {ConfigService} from "@nestjs/config";
+import {TypeOrmModuleOptions, TypeOrmOptionsFactory} from "@nestjs/typeorm";
+import {User} from "../user/entities/user.entity";
 import {ChaletEntity} from "../chalet/entities/chalet.entity";
 import {PhotoEntity} from "../photo/entities/photo.entity";
 import {PrestationPayanteEntity} from "../tarifs/entities/prestation-payante.entity";
@@ -21,7 +21,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     databaseConfig: DatabaseConfig;
 
     constructor(private configService: ConfigService) {
-        this.databaseConfig = configService.get<DatabaseConfig>('database');
+        this.databaseConfig = this.configService.get<DatabaseConfig>('database');
     }
 
     createTypeOrmOptions(): TypeOrmModuleOptions {

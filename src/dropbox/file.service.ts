@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable} from "@nestjs/common";
 
 @Injectable()
 export class FileService {
@@ -8,5 +8,5 @@ export class FileService {
         if (i == -1) i = filename.length;
         return filename.substr(i);
     }
-    
+
 }

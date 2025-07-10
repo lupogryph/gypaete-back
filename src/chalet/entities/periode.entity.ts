@@ -3,10 +3,10 @@ import {Column, Entity} from "typeorm";
 @Entity("periode")
 export class PeriodeEntity {
 
-    @Column({ type: 'date' })
+    @Column({type: 'date'})
     dateDebut: Date;
 
-    @Column({ type: 'date' })
+    @Column({type: 'date'})
     dateFin: Date;
 
     @Column()

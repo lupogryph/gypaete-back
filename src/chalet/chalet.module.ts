@@ -1,16 +1,14 @@
-import {Module} from '@nestjs/common';
-import {ChaletService} from './chalet.service';
-import {ChaletController} from './chalet.controller';
+import {Module} from "@nestjs/common";
+import {ChaletService} from "./chalet.service";
+import {ChaletController} from "./chalet.controller";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ChaletEntity} from "./entities/chalet.entity";
-import {PhotoService} from "../photo/photo.service";
-import {PhotoEntity} from "../photo/entities/photo.entity";
-import {ApiConfigService} from "../config/api.config.service";
+import {PhotoModule} from "../photo/photo.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([ChaletEntity, PhotoEntity])],
+    imports: [PhotoModule, TypeOrmModule.forFeature([ChaletEntity])],
     controllers: [ChaletController],
-    providers: [ChaletService, PhotoService, ApiConfigService],
+    providers: [ChaletService, TypeOrmModule],
 })
 export class ChaletModule {
 }
