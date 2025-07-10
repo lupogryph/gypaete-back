@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  mariadb:
+    image: "mariadb:latest"
+    restart: 'always'
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "R00TPassw0rd"
+      MYSQL_DATABASE: "gypaete_db"
+      MYSQL_USER: "db"
+      MYSQL_PASSWORD: "Passw0rd"

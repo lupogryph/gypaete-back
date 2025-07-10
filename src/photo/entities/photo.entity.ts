@@ -2,7 +2,6 @@ import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique} from 'typeorm
 import {ChaletEntity} from "../../chalet/entities/chalet.entity";
 
 @Entity("photo")
-@Unique(['invite', 'categorie'])
 export class PhotoEntity {
 
     @PrimaryGeneratedColumn('uuid')
