@@ -1,32 +1,25 @@
-import {Injectable} from "@nestjs/common";
-import {ConfigService} from "@nestjs/config";
+import {Inject, Injectable} from "@nestjs/common";
+import {ConfigType} from "@nestjs/config";
 import {TypeOrmModuleOptions, TypeOrmOptionsFactory} from "@nestjs/typeorm";
 import {User} from "../user/entities/user.entity";
 import {ChaletEntity} from "../chalet/entities/chalet.entity";
 import {PhotoEntity} from "../photo/entities/photo.entity";
 import {PrestationPayanteEntity} from "../tarifs/entities/prestation-payante.entity";
 import {AnimalEntity} from "../tarifs/entities/animal.entity";
-
-interface DatabaseConfig {
-    host: string;
-    port: number;
-    username: string;
-    password: string;
-    database: string;
-    synchronize: boolean;
-}
+import databaseConfig from "./database.config";
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
-    databaseConfig: DatabaseConfig;
 
-    constructor(private configService: ConfigService) {
-        this.databaseConfig = this.configService.get<DatabaseConfig>('database');
+    constructor(
+        @Inject(databaseConfig.KEY)
+        private config: ConfigType<typeof databaseConfig>,
+    ) {
     }
 
     createTypeOrmOptions(): TypeOrmModuleOptions {
         return {
-            ...this.databaseConfig,
+            ...this.config,
             type: 'mariadb',
             entities: [
                 User,

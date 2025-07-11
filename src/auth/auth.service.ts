@@ -1,10 +1,11 @@
-import {Injectable, UnauthorizedException} from "@nestjs/common";
+import {Inject, Injectable, UnauthorizedException} from "@nestjs/common";
 import * as crypto from "node:crypto";
 import {JwtService} from "@nestjs/jwt";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
-import {JwtConfigService} from "./jwt.config.service";
 import {User} from "../user/entities/user.entity";
+import jwtConfig from "./jwt.config";
+import {ConfigType} from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,8 @@ export class AuthService {
         private jwt: JwtService,
         @InjectRepository(User)
         private repository: Repository<User>,
-        private readonly config: JwtConfigService,
+        @Inject(jwtConfig.KEY)
+        private readonly config: ConfigType<typeof jwtConfig>,
     ) {
     }
 
@@ -23,7 +25,7 @@ export class AuthService {
         const user = await this.repository.findOneBy({email: email});
         if (user == null) throw new UnauthorizedException("Erreur A01");
         const db_hash = Buffer.from(user.mdp, 'hex');
-        const salt = this.config.jwtConfig.salt;
+        const salt = this.config.salt;
         const hash = crypto.scryptSync(password, salt, 24);
         if (crypto.timingSafeEqual(db_hash, hash)) {
             return {

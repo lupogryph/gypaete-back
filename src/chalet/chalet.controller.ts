@@ -5,6 +5,7 @@ import {UpdateChaletDto} from "./dto/update-chalet.dto";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {memoryStorage} from "multer";
 import {Express} from "express";
+import {Public} from "../auth/public.decorator";
 
 @Controller('chalet')
 export class ChaletController {
@@ -19,11 +20,13 @@ export class ChaletController {
     }
 
     @Get()
+    @Public()
     findAll() {
         return this.chaletService.findAll();
     }
 
     @Get(':nom')
+    @Public()
     findOne(@Param('nom') nom: string) {
         return this.chaletService.findOne(nom);
     }

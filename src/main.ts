@@ -2,11 +2,11 @@ import {NestFactory} from "@nestjs/core";
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import {AppModule} from "./app.module";
 import {ValidationPipe} from "@nestjs/common";
-import {AppConfigService} from "./config/app.config.service";
+import {ConfigService} from "@nestjs/config";
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    const appConfig = app.get(AppConfigService).appConfig;
+    const appConfig = app.get(ConfigService).get('app');
 
     app.enableCors();
 
@@ -21,7 +21,7 @@ async function bootstrap() {
     const config = new DocumentBuilder()
         .setTitle(appConfig.name)
         .setDescription('API')
-        .setVersion('1.0')
+        .setVersion(appConfig.version)
         .addBearerAuth()
         .build();
     const document = SwaggerModule.createDocument(app, config, {

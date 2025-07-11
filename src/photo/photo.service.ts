@@ -1,9 +1,10 @@
-import {Injectable, InternalServerErrorException} from "@nestjs/common";
+import {Inject, Injectable, InternalServerErrorException} from "@nestjs/common";
 import {PhotoEntity} from "./entities/photo.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Jimp} from "jimp";
 import {Repository} from "typeorm";
-import {AppConfigService} from "../config/app.config.service";
+import appConfig from "../config/app.config";
+import {ConfigType} from "@nestjs/config";
 
 @Injectable()
 export class PhotoService {
@@ -11,7 +12,8 @@ export class PhotoService {
     constructor(
         @InjectRepository(PhotoEntity)
         private photoRepository: Repository<PhotoEntity>,
-        private readonly config: AppConfigService,
+        @Inject(appConfig.KEY)
+        private readonly config: ConfigType<typeof appConfig>,
     ) {
     }
 
@@ -19,7 +21,7 @@ export class PhotoService {
         if (!file) {
             throw new InternalServerErrorException('No file provided');
         }
-        const filesUrl = `${this.config.baseUrl()}/files`;
+        const filesUrl = `${this.baseUrl()}/files`;
         photoEntity.url = `${filesUrl}/photos/${photoEntity.id}.jpg`;
         photoEntity.thumbnailUrl = `${filesUrl}/thumbnails/${photoEntity.id}.jpg`;
         await this.createResizedPhoto(photoEntity.id, file);
@@ -41,6 +43,11 @@ export class PhotoService {
         const image = await Jimp.read(file);
         image.resize({h: 320}); // Resize to 320px height, auto width
         return image.write(`./images/thumbnails/${name}.jpg`); // Save thumbnail
+    }
+
+    baseUrl(): string {
+        const protocol = this.config.https ? 'https' : 'http';
+        return `${protocol}://${this.config.host}:${this.config.port}`;
     }
 
 }

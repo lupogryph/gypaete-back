@@ -1,22 +1,22 @@
-import {Injectable, InternalServerErrorException} from "@nestjs/common";
+import {Inject, Injectable, InternalServerErrorException} from "@nestjs/common";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {InjectRepository} from "@nestjs/typeorm";
 import {User} from "./entities/user.entity";
 import {Repository} from "typeorm";
 import * as crypto from "node:crypto";
-import {JwtConfigService} from "../auth/jwt.config.service";
+import jwtConfig from "../auth/jwt.config";
+import {ConfigType} from "@nestjs/config";
 
 @Injectable()
 export class UserService {
-    salt: string;
 
     constructor(
         @InjectRepository(User)
         private repository: Repository<User>,
-        private jwtConfigService: JwtConfigService,
+        @Inject(jwtConfig.KEY)
+        private config: ConfigType<typeof jwtConfig>,
     ) {
-        this.salt = this.jwtConfigService.jwtConfig.salt;
     }
 
     create(createUserDto: CreateUserDto) {
@@ -26,7 +26,7 @@ export class UserService {
     }
 
     hashPassword(password: string) {
-        const hash = crypto.scryptSync(password, this.salt, 24);
+        const hash = crypto.scryptSync(password, this.config.salt, 24);
         if (hash == null) {
             throw new InternalServerErrorException();
         }

@@ -9,15 +9,14 @@ import jwtConfig from "./auth/jwt.config";
 import {APP_INTERCEPTOR} from "@nestjs/core";
 import {ChaletModule} from "./chalet/chalet.module";
 import {TarifsModule} from "./tarifs/tarifs.module";
-import dropboxConfig from "./dropbox/dropbox.config";
 import {PhotoModule} from "./photo/photo.module";
 import appConfig from "./config/app.config";
 
 @Module({
     imports: [
         ConfigModule.forRoot({
-            envFilePath: '.dev.env',
-            load: [appConfig, databaseConfig, jwtConfig, dropboxConfig],
+            envFilePath: ['.dev.env', '.env'],
+            load: [appConfig, databaseConfig, jwtConfig],
             isGlobal: true,
         }),
         TypeOrmModule.forRootAsync({useClass: TypeOrmConfigService}),

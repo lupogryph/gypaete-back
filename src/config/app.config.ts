@@ -1,9 +1,12 @@
 import {registerAs} from "@nestjs/config";
 import * as process from "node:process";
 
-export default registerAs('app', () => ({
+const KEY = 'app';
+
+export default registerAs(KEY, () => ({
     name: process.env.APP_NAME || "Chalet API",
-    https: process.env.APP_HTTPS || true,
+    version: process.env.APP_VERSION || "0.0.0",
+    https: (process.env.APP_HTTPS === "true") || true,
     host: process.env.APP_HOST || "localhost",
-    port: process.env.APP_PORT || process.env.ALWAYSDATA_HTTPD_PORT || 3000,
+    port: parseInt(process.env.APP_PORT) || parseInt(process.env.ALWAYSDATA_HTTPD_PORT) || 3000,
 }));
