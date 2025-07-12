@@ -23,8 +23,8 @@ export class AuthService {
         password: string,
     ): Promise<{ access_token: string }> {
         const user = await this.repository.findOneBy({email: email});
-        if (user == null) throw new UnauthorizedException("Erreur A01");
-        const db_hash = Buffer.from(user.mdp, 'hex');
+        if (user == null) throw new UnauthorizedException("Erreur AS01");
+        const db_hash = Buffer.from(user.password, 'hex');
         const salt = this.config.salt;
         const hash = crypto.scryptSync(password, salt, 24);
         if (crypto.timingSafeEqual(db_hash, hash)) {

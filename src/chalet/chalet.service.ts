@@ -16,8 +16,8 @@ export class ChaletService {
     ) {
     }
 
-    create(createChaletDto: CreateChaletDto) {
-        return this.chaletRepository.create(createChaletDto);
+    async create(createChaletDto: CreateChaletDto) {
+        return this.chaletRepository.save(createChaletDto);
     }
 
     findAll() {
@@ -45,4 +45,5 @@ export class ChaletService {
         photo.chalet = chalet;
         return this.photoService.uploadPhoto(photo, file);
     }
+
 }

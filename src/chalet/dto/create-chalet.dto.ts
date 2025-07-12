@@ -1,24 +1,11 @@
-import {ApiProperty} from "@nestjs/swagger";
+import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
 import {IsNotEmpty} from "class-validator";
-import {PrestationPayanteDto} from "../../tarifs/dto/prestation-payante.dto";
-import {FrEn} from "../../i18n/fren";
+import {ChaletDto} from "./chalet.dto";
 
-export class CreateChaletDto {
+export class CreateChaletDto extends ChaletDto {
 
     @ApiProperty()
     @IsNotEmpty()
-    nom: string;
-
-    @ApiProperty()
-    description: FrEn;
-
-    @ApiProperty({type: [FrEn]})
-    prestations: FrEn[];
-
-    @ApiProperty()
-    nombrePersonnesBase: number;
-
-    @ApiProperty({type: [PrestationPayanteDto]})
-    prestationsPayantes: PrestationPayanteDto[];
+    readonly nom: string;
 
 }

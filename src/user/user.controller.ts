@@ -14,7 +14,6 @@ export class UserController {
     }
 
     @ApiOkResponse({type: UserDto})
-    @Public()
     @Post()
     create(@Body() createUserDto: CreateUserDto) {
         delete createUserDto.role;

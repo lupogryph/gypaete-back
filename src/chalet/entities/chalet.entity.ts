@@ -21,7 +21,7 @@ export class ChaletEntity {
     @Column()
     nombrePersonnesBase: number;
 
-    @OneToMany(() => PrestationPayanteEntity, p => p.id)
+    @OneToMany(() => PrestationPayanteEntity, p => p.chalet, {cascade: ['insert', 'update']})
     prestationsPayantes: PrestationPayanteEntity[];
 
 }

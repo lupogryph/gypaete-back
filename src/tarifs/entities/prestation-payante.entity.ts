@@ -1,5 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {FrEn} from "../../i18n/fren";
+import {ChaletEntity} from "../../chalet/entities/chalet.entity";
 
 @Entity("prestationPayante")
 export class PrestationPayanteEntity {
@@ -18,5 +19,9 @@ export class PrestationPayanteEntity {
 
     @Column({default: false})
     parNuit: boolean;
+
+    @ManyToOne(() => ChaletEntity, c => c.prestationsPayantes)
+    @JoinColumn({ name: 'chalet' })
+    chalet: ChaletEntity;
 
 }

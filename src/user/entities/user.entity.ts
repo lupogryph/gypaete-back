@@ -13,14 +13,14 @@ export class User {
     email: string;
 
     @Column()
-    prenom: string;
+    firstName: string;
 
     @Column()
-    nom: string;
+    name: string;
 
     @Exclude()
     @Column()
-    mdp: string;
+    password: string;
 
     @Column({
         type: 'enum',
