@@ -9,5 +9,6 @@ export default registerAs(KEY, () => ({
     https: !(process.env.APP_HTTPS === "false"),
     host: process.env.APP_HOST || "localhost",
     port: parseInt(process.env.APP_PORT) || parseInt(process.env.ALWAYSDATA_HTTPD_PORT) || 3000,
+    salt: process.env.APP_SALT,
     guard: !(process.env.APP_GUARD === "false"),
 }));

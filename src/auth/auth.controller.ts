@@ -1,26 +1,35 @@
-import {Body, Controller, Get, Post, Request} from "@nestjs/common";
+import {Controller, Get, Post, Request, UseGuards} from "@nestjs/common";
 import {AuthService} from "./auth.service";
+import {ApiBearerAuth, ApiBody, ApiConsumes, ApiProperty, ApiTags} from "@nestjs/swagger";
+import {LocalAuthGuard} from "./local-auth.guard";
 import {Public} from "./public.decorator";
-import {Auth} from "./dto/auth.dto";
-import {ApiBearerAuth, ApiOkResponse, ApiTags} from "@nestjs/swagger";
-import {TokenDto} from "./dto/token.dto";
 
-@ApiBearerAuth()
+class LoginDto {
+    @ApiProperty()
+    email: string;
+    @ApiProperty()
+    password: string;
+}
+
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) {
     }
 
-    @ApiOkResponse({type: TokenDto})
+    @ApiConsumes('application/x-www-form-urlencoded')
+    @ApiBody({type: LoginDto})
+    @UseGuards(LocalAuthGuard)
     @Public()
     @Post()
-    connecter(@Body() auth: Auth) {
-        return this.authService.connecter(auth.email, auth.password);
+    async login(@Request() req) {
+        return this.authService.login(req.user);
     }
 
+    @ApiBearerAuth()
     @Get()
-    getProfile(@Request() req) {
+    profile(@Request() req) {
         return req.user;
     }
+
 }

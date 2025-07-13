@@ -1,42 +1,35 @@
-import {Inject, Injectable, UnauthorizedException} from "@nestjs/common";
-import * as crypto from "node:crypto";
+import {Injectable} from "@nestjs/common";
 import {JwtService} from "@nestjs/jwt";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
+import {UserService} from "../user/user.service";
 import {User} from "../user/entities/user.entity";
-import jwtConfig from "./jwt.config";
-import {ConfigType} from "@nestjs/config";
+import * as crypto from "node:crypto";
 
 @Injectable()
 export class AuthService {
     constructor(
-        private jwt: JwtService,
-        @InjectRepository(User)
-        private repository: Repository<User>,
-        @Inject(jwtConfig.KEY)
-        private readonly config: ConfigType<typeof jwtConfig>,
+        private jwtService: JwtService,
+        private userService: UserService,
     ) {
     }
 
-    async connecter(
-        email: string,
-        password: string,
-    ): Promise<{ access_token: string }> {
-        const user = await this.repository.findOneBy({email: email});
-        if (user == null) throw new UnauthorizedException("Erreur AS01");
-        const db_hash = Buffer.from(user.password, 'hex');
-        const salt = this.config.salt;
-        const hash = crypto.scryptSync(password, salt, 24);
-        if (crypto.timingSafeEqual(db_hash, hash)) {
-            return {
-                access_token: await this.jwt.signAsync({
-                    sub: user.id,
-                    email: user.email,
-                    role: user.role,
-                }),
-            };
-        } else {
-            throw new UnauthorizedException();
+    async validateUser(email: string, password: string) {
+        const user = await this.userService.findByEmail(email);
+        if (user && this.validatePasswords(password, user.password)) {
+            return user;
         }
+        return null;
+    }
+
+    validatePasswords(given: string, expected: string) {
+        const expected_hash = Buffer.from(expected, 'hex');
+        const hash = this.userService.encrypt(given);
+        return crypto.timingSafeEqual(hash, expected_hash);
+    }
+
+    async login(user: User) {
+        const payload = {email: user.email, sub: user.id};
+        return {
+            access_token: this.jwtService.sign(payload),
+        };
     }
 }

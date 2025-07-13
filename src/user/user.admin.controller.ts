@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards,} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Patch, Post,} from "@nestjs/common";
 import {UserService} from "./user.service";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
@@ -6,7 +6,6 @@ import {ApiBearerAuth, ApiOkResponse, ApiTags} from "@nestjs/swagger";
 import {UserDto} from "./dto/user.dto";
 import {Roles} from "../auth/role.decorator";
 import {Role} from "../auth/roles.enum";
-import {RolesGuard} from "../auth/role.guard";
 
 @ApiBearerAuth()
 @ApiTags('admin')
@@ -16,7 +15,6 @@ export class UserAdminController {
     }
 
     @ApiOkResponse({type: UserDto})
-    @UseGuards(RolesGuard)
     @Roles(Role.ADMIN)
     @Post()
     create(@Body() createUserDto: CreateUserDto) {
@@ -24,7 +22,6 @@ export class UserAdminController {
     }
 
     @ApiOkResponse({type: UserDto, isArray: true})
-    @UseGuards(RolesGuard)
     @Roles(Role.ADMIN)
     @Get()
     findAll() {
@@ -32,21 +29,18 @@ export class UserAdminController {
     }
 
     @ApiOkResponse({type: UserDto})
-    @UseGuards(RolesGuard)
     @Roles(Role.ADMIN)
     @Get(':id')
     findOne(@Param('id') id: number) {
         return this.userService.findById(id);
     }
 
-    @UseGuards(RolesGuard)
     @Roles(Role.ADMIN)
     @Patch(':id')
     update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
         return this.userService.update(id, updateUserDto);
     }
 
-    @UseGuards(RolesGuard)
     @Roles(Role.ADMIN)
     @Delete(':id')
     remove(@Param('id') id: number) {

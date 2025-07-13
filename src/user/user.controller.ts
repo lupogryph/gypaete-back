@@ -4,7 +4,6 @@ import {CreateUserDto} from "./dto/create-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {ApiBearerAuth, ApiOkResponse, ApiTags} from "@nestjs/swagger";
 import {UserDto} from "./dto/user.dto";
-import {Public} from "../auth/public.decorator";
 
 @ApiBearerAuth()
 @ApiTags('user')
@@ -23,17 +22,17 @@ export class UserController {
     @ApiOkResponse({type: UserDto})
     @Get()
     find(@Request() req) {
-        return this.userService.findById(req.user.sub);
+        return this.userService.findById(req.user.id);
     }
 
     @Patch()
     update(@Request() req, @Body() updateUserDto: UpdateUserDto) {
         delete updateUserDto.role; // prevent role change
-        return this.userService.update(req.user.sub, updateUserDto);
+        return this.userService.update(req.user.id, updateUserDto);
     }
 
     @Delete()
     remove(@Request() req) {
-        return this.userService.remove(req.user.sub);
+        return this.userService.remove(req.user.id);
     }
 }
