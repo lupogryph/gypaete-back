@@ -5,8 +5,8 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {User} from "./entities/user.entity";
 import {Repository} from "typeorm";
 import * as crypto from "node:crypto";
-import jwtConfig from "../auth/jwt.config";
 import {ConfigType} from "@nestjs/config";
+import appConfig from "../config/app.config";
 
 @Injectable()
 export class UserService {
@@ -14,8 +14,8 @@ export class UserService {
     constructor(
         @InjectRepository(User)
         private repository: Repository<User>,
-        @Inject(jwtConfig.KEY)
-        private config: ConfigType<typeof jwtConfig>,
+        @Inject(appConfig.KEY)
+        private config: ConfigType<typeof appConfig>,
     ) {
     }
 
@@ -25,8 +25,12 @@ export class UserService {
         return this.repository.save(user);
     }
 
+    encrypt(password: string) {
+        return crypto.scryptSync(password, this.config.salt, 24);
+    }
+
     hashPassword(password: string) {
-        const hash = crypto.scryptSync(password, this.config.salt, 24);
+        const hash = this.encrypt(password);
         if (hash == null) {
             throw new InternalServerErrorException();
         }
