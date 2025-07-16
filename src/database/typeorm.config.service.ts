@@ -12,6 +12,7 @@ import {AnimalEntity} from "../tarifs/entities/animal.entity";
 import {PersonneEntity} from "../tarifs/entities/personne.entity";
 import {LitEntity} from "../chambres/entities/lit.entity";
 import {PeriodeEntity} from "../chalet/entities/periode.entity";
+import {LitChambreEntity} from "../chambres/entities/lit-chambre.entity";
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -32,6 +33,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
                 PeriodeEntity,
                 ChambreEntity,
                 LitEntity,
+                LitChambreEntity,
                 PhotoEntity,
                 PrestationPayanteEntity,
                 ConditionEntity,

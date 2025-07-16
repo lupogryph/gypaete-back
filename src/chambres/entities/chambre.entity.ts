@@ -1,11 +1,11 @@
-import {Column, Entity, ManyToMany, OneToMany, PrimaryColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryColumn} from "typeorm";
 import {PhotoEntity} from "../../photo/entities/photo.entity";
 import {FrEn} from "../../i18n/fren";
-import {LitEntity} from "./lit.entity";
 import {BainDouche} from "../types/baignoireOuDouche.enum";
 import {PrestationPayanteEntity} from "../../tarifs/entities/prestation-payante.entity";
 import {AnimalEntity} from "../../tarifs/entities/animal.entity";
 import {PersonneEntity} from "../../tarifs/entities/personne.entity";
+import {LitChambreEntity} from "./lit-chambre.entity";
 
 @Entity("chambre")
 export class ChambreEntity {
@@ -28,8 +28,8 @@ export class ChambreEntity {
     @Column({default: false})
     pmr: boolean;
 
-    @ManyToMany(() => LitEntity, (lit) => lit.chambres, {cascade: true})
-    lits: LitEntity[];
+    @OneToMany(() => LitChambreEntity, (l) => l.chambre)
+    lits: LitChambreEntity[];
 
     @Column()
     terasse: boolean;

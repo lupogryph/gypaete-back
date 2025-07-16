@@ -1,7 +1,7 @@
-import {Column, Entity, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
-import {ChambreEntity} from "./chambre.entity";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {LitChambreEntity} from "./lit-chambre.entity";
 
-@Entity("Lit")
+@Entity("lit")
 export class LitEntity {
 
     @PrimaryGeneratedColumn()
@@ -13,7 +13,7 @@ export class LitEntity {
     @Column()
     largeur: number;
 
-    @ManyToMany(() => ChambreEntity, (chambre) => chambre.lits)
-    chambres: ChambreEntity[];
+    @OneToMany(() => LitChambreEntity, (l) => l.lit)
+    chambres: LitChambreEntity[];
 
 }
