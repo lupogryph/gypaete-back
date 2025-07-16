@@ -1,9 +1,10 @@
-import {Column, Entity} from "typeorm";
+import {Column, Entity, ManyToOne, PrimaryColumn} from "typeorm";
+import {ChaletEntity} from "./chalet.entity";
 
 @Entity("periode")
 export class PeriodeEntity {
 
-    @Column({type: 'date'})
+    @PrimaryColumn({type: 'date'})
     dateDebut: Date;
 
     @Column({type: 'date'})
@@ -11,5 +12,8 @@ export class PeriodeEntity {
 
     @Column()
     cout: number;
+
+    @ManyToOne(() => ChaletEntity, (chalet) => chalet.periodes)
+    chalet: ChaletEntity;
 
 }

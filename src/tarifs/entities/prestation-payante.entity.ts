@@ -1,27 +1,18 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {FrEn} from "../../i18n/fren";
+import {Column, Entity, ManyToOne} from "typeorm";
 import {ChaletEntity} from "../../chalet/entities/chalet.entity";
+import {ChambreEntity} from "../../chambres/entities/chambre.entity";
+import {ConditionEntity} from "./condition.entity";
 
-@Entity("prestationPayante")
-export class PrestationPayanteEntity {
-
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column({type: 'json'})
-    condition: FrEn;
-
-    @Column()
-    cout: number;
+@Entity("tarif_prestation_payante")
+export class PrestationPayanteEntity extends ConditionEntity {
 
     @Column({default: false})
     parPersonne: boolean;
 
-    @Column({default: false})
-    parNuit: boolean;
-
-    @ManyToOne(() => ChaletEntity, c => c.prestationsPayantes)
-    @JoinColumn({ name: 'chalet' })
+    @ManyToOne(() => ChaletEntity, (c) => c.prestationsPayantes)
     chalet: ChaletEntity;
+
+    @ManyToOne(() => ChambreEntity, (c) => c.prestationsPayantes)
+    chambre: ChambreEntity;
 
 }

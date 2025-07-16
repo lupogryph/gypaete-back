@@ -6,6 +6,6 @@ export class FrEn {
     fr: string;
 
     @ApiPropertyOptional()
-    en?: string;
+    en: string;
 
 }

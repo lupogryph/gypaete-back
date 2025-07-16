@@ -1,15 +1,15 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Entity, ManyToOne} from "typeorm";
+import {ConditionEntity} from "./condition.entity";
+import {ChaletEntity} from "../../chalet/entities/chalet.entity";
+import {ChambreEntity} from "../../chambres/entities/chambre.entity";
 
-@Entity("animal")
-export class AnimalEntity {
+@Entity("tarif_animal")
+export class AnimalEntity extends ConditionEntity {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @ManyToOne(() => ChaletEntity, (c) => c.animaux)
+    chalet: ChaletEntity;
 
-    @Column({type: 'json'})
-    condition: Map<'fr' | 'en', string>[];
-
-    @Column()
-    cout: number;
+    @ManyToOne(() => ChambreEntity, (c) => c.animaux)
+    chambre: ChambreEntity;
 
 }
