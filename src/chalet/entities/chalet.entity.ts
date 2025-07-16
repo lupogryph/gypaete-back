@@ -1,9 +1,9 @@
-import {Column, Entity, OneToMany, PrimaryColumn} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn} from "typeorm";
 import {PhotoEntity} from "../../photo/entities/photo.entity";
 import {PrestationPayanteEntity} from "../../tarifs/entities/prestation-payante.entity";
 import {FrEn} from "../../i18n/fren";
 import {PeriodeEntity} from "./periode.entity";
-import {AnimalEntity} from "../../tarifs/entities/animal.entity";
+import {ConditionEntity} from "../../tarifs/entities/condition.entity";
 
 @Entity("chalet")
 export class ChaletEntity {
@@ -14,7 +14,8 @@ export class ChaletEntity {
     @Column({type: "json"})
     description: FrEn;
 
-    @OneToMany(() => PhotoEntity, p => p.id)
+    @ManyToMany(() => PhotoEntity)
+    @JoinTable({name: "chalet_photo"})
     photos: PhotoEntity[];
 
     @Column({type: "json"})
@@ -29,10 +30,12 @@ export class ChaletEntity {
     @Column()
     animauxAutorises: boolean;
 
-    @OneToMany(() => AnimalEntity, c => c.chalet, {cascade: true})
-    animaux: AnimalEntity[];
+    @ManyToMany(() => ConditionEntity)
+    @JoinTable({name: 'chalet_animaux'})
+    animaux: ConditionEntity[];
 
-    @OneToMany(() => PrestationPayanteEntity, p => p.chalet, {cascade: true})
+    @ManyToMany(() => PrestationPayanteEntity)
+    @JoinTable({name: "chalet_prestation_payante"})
     prestationsPayantes: PrestationPayanteEntity[];
 
 }

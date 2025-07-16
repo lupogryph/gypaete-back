@@ -17,16 +17,17 @@ export class PhotoService {
     ) {
     }
 
-    async uploadPhoto(photoEntity: PhotoEntity, file: Buffer): Promise<PhotoEntity> {
+    async toEntity(file: Buffer): Promise<PhotoEntity> {
         if (!file) {
             throw new InternalServerErrorException('No file provided');
         }
+        const photoEntity = new PhotoEntity();
         const filesUrl = `${this.baseUrl()}/files`;
         photoEntity.url = `${filesUrl}/photos/${photoEntity.id}.jpg`;
         photoEntity.thumbnailUrl = `${filesUrl}/thumbnails/${photoEntity.id}.jpg`;
         await this.createResizedPhoto(photoEntity.id, file);
         await this.createThumbnail(photoEntity.id, file);
-        return this.photoRepository.save(photoEntity);
+        return photoEntity;
     }
 
     async deletePhoto(id: string) {

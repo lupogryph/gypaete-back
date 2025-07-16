@@ -1,6 +1,4 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {ChaletEntity} from "../../chalet/entities/chalet.entity";
-import {ChambreEntity} from "../../chambres/entities/chambre.entity";
+import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity("photo")
 export class PhotoEntity {
@@ -13,11 +11,5 @@ export class PhotoEntity {
 
     @Column()
     thumbnailUrl: string;
-
-    @ManyToOne(() => ChaletEntity, c => c.nom)
-    chalet: ChaletEntity;
-
-    @ManyToOne(() => ChambreEntity, c => c.numero)
-    chambre: ChambreEntity;
 
 }

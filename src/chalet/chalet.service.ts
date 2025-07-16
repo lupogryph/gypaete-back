@@ -5,7 +5,6 @@ import {PhotoService} from "../photo/photo.service";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ChaletEntity} from "./entities/chalet.entity";
 import {Repository} from "typeorm";
-import {PhotoEntity} from "../photo/entities/photo.entity";
 
 @Injectable()
 export class ChaletService {
@@ -37,13 +36,12 @@ export class ChaletService {
     }
 
     async uploadPhoto(nom: string, file: Buffer) {
-        const chalet = await this.chaletRepository.findOneBy({nom: nom});
-        if (!chalet) {
-            throw new Error(`Chalet with name ${nom} not found`);
-        }
-        const photo = new PhotoEntity();
-        photo.chalet = chalet;
-        return this.photoService.uploadPhoto(photo, file);
+        const photoEntity = await this.photoService.toEntity(file);
+        return this.chaletRepository.manager
+            .createQueryBuilder()
+            .relation("photo")
+            .of(nom)
+            .add(photoEntity);
     }
 
 }

@@ -1,11 +1,10 @@
-import {Column, Entity, OneToMany, PrimaryColumn} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn} from "typeorm";
 import {PhotoEntity} from "../../photo/entities/photo.entity";
 import {FrEn} from "../../i18n/fren";
 import {BainDouche} from "../types/baignoireOuDouche.enum";
 import {PrestationPayanteEntity} from "../../tarifs/entities/prestation-payante.entity";
-import {AnimalEntity} from "../../tarifs/entities/animal.entity";
-import {PersonneEntity} from "../../tarifs/entities/personne.entity";
 import {LitChambreEntity} from "./lit-chambre.entity";
+import {ConditionEntity} from "../../tarifs/entities/condition.entity";
 
 @Entity("chambre")
 export class ChambreEntity {
@@ -13,10 +12,11 @@ export class ChambreEntity {
     @PrimaryColumn()
     numero: number;
 
-    @PrimaryColumn()
+    @Column({unique: true})
     nom: string;
 
-    @OneToMany(() => PhotoEntity, (photo) => photo.chambre, {cascade: true})
+    @ManyToMany(() => PhotoEntity)
+    @JoinTable({name: "chambre_photo"})
     photos: PhotoEntity[];
 
     @Column({default: 1})
@@ -64,16 +64,19 @@ export class ChambreEntity {
     @Column()
     nuitSupplementaireCout: number;
 
-    @OneToMany(() => PersonneEntity, (p) => p.chambre, {cascade: true})
-    personnesSupplementaires: PersonneEntity[];
+    @ManyToMany(() => ConditionEntity)
+    @JoinTable({name: "chambre_personnes_supplementaires"})
+    personnesSupplementaires: ConditionEntity[];
 
     @Column()
     animauxAutorises: boolean;
 
-    @OneToMany(() => AnimalEntity, (a) => a.chambre, {cascade: true})
-    animaux: AnimalEntity[];
+    @ManyToMany(() => ConditionEntity)
+    @JoinTable({name: "chambre_animaux"})
+    animaux: ConditionEntity[];
 
-    @OneToMany(() => PrestationPayanteEntity, (p) => p.chambre, {cascade: true})
+    @ManyToMany(() => PrestationPayanteEntity)
+    @JoinTable({name: "chambre_prestation_payante"})
     prestationsPayantes: PrestationPayanteEntity[];
 
 }
