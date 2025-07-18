@@ -6,8 +6,9 @@ import {FileInterceptor} from "@nestjs/platform-express";
 import {memoryStorage} from "multer";
 import {Express} from "express";
 import {Public} from "../auth/public.decorator";
-import {ApiBearerAuth, ApiBody, ApiConsumes} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse} from "@nestjs/swagger";
 import {UploadDto} from "../photo/dto/upload.dto";
+import {ChaletDto} from "./dto/chalet.dto";
 
 @Controller('chalet')
 export class ChaletController {
@@ -16,18 +17,21 @@ export class ChaletController {
     ) {
     }
 
+    @ApiOkResponse({type: ChaletDto})
     @ApiBearerAuth()
     @Post()
     create(@Body() createChaletDto: CreateChaletDto) {
         return this.chaletService.create(createChaletDto);
     }
 
+    @ApiOkResponse({type: ChaletDto, isArray: true})
     @Get()
     @Public()
     findAll() {
         return this.chaletService.findAll();
     }
 
+    @ApiOkResponse({type: ChaletDto})
     @Get(':nom')
     @Public()
     findOne(@Param('nom') nom: string) {

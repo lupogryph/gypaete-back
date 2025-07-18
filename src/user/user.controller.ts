@@ -3,7 +3,8 @@ import {UserService} from "./user.service";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {ApiBearerAuth, ApiOkResponse, ApiTags} from "@nestjs/swagger";
-import {User} from "./entities/user.entity";
+import {UserDto} from "./dto/user.dto";
+import {Public} from "../auth/public.decorator";
 
 @ApiBearerAuth()
 @ApiTags('user')
@@ -12,14 +13,15 @@ export class UserController {
     constructor(private readonly userService: UserService) {
     }
 
-    @ApiOkResponse({type: User})
+    @ApiOkResponse({type: UserDto})
+    @Public() // todo: remove this decorator when user registration is not needed
     @Post()
     create(@Body() createUserDto: CreateUserDto) {
         delete createUserDto.role;
         return this.userService.create(createUserDto);
     }
 
-    @ApiOkResponse({type: User})
+    @ApiOkResponse({type: UserDto})
     @Get()
     find(@Request() req) {
         return this.userService.findById(req.user.id);
