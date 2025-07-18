@@ -36,7 +36,7 @@ export class ChaletService {
     }
 
     async uploadPhoto(nom: string, file: Buffer) {
-        const photoEntity = await this.photoService.toEntity(file);
+        const photoEntity = await this.photoService.uploadToEntity(file);
         return this.chaletRepository.manager
             .createQueryBuilder()
             .relation("photo")

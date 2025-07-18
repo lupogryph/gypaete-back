@@ -27,25 +27,10 @@ module.exports = (options, webpack) => ({
       }),
     ]
   },
-  target: 'node20',
+    target: 'node22',
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    filename: '[name].js'
+      filename: 'gypaete-back.js'
   },
-  externals: [],
-  plugins: [
-    ...options.plugins,
-    new webpack.IgnorePlugin({
-      checkResource(resource) {
-        if (lazyImports.includes(resource)) {
-          try {
-            require.resolve(resource)
-          } catch (err) {
-            return true
-          }
-        }
-        return false
-      },
-    }),
-  ],
+    externals: []
 })

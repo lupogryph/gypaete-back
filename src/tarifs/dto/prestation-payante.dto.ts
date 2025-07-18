@@ -1,23 +1,11 @@
-import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
-import {FrEn} from "../../i18n/fren";
-import {IsBoolean, IsNumber, IsObject} from "class-validator";
+import {ApiPropertyOptional} from "@nestjs/swagger";
+import {IsBoolean} from "class-validator";
+import {ConditionDto} from "./condition.dto";
 
-export class PrestationPayanteDto {
-
-    @ApiProperty()
-    @IsObject()
-    condition: FrEn;
-
-    @ApiProperty({minimum: 0})
-    @IsNumber()
-    cout: number;
+export class PrestationPayanteDto extends ConditionDto {
 
     @ApiPropertyOptional()
     @IsBoolean()
     parPersonne: boolean;
-
-    @ApiPropertyOptional()
-    @IsBoolean()
-    parNuit: boolean;
 
 }

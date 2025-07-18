@@ -11,4 +11,5 @@ export default registerAs(KEY, () => ({
     port: parseInt(process.env.APP_PORT) || parseInt(process.env.ALWAYSDATA_HTTPD_PORT) || 3000,
     salt: process.env.APP_SALT,
     guard: !(process.env.APP_GUARD === "false"),
+    photos_space: parseInt(process.env.APP_PHOTOS_SPACE) || 61440,
 }));

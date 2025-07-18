@@ -12,4 +12,7 @@ export class PhotoEntity {
     @Column()
     thumbnailUrl: string;
 
+    @Column()
+    size: number;
+
 }

@@ -51,7 +51,7 @@ export class ChaletController {
     @ApiBody({description: "photo", type: UploadDto})
     @UseInterceptors(FileInterceptor('file', {storage: memoryStorage()}))
     @Put('/:nom/photo')
-    createForChalet(
+    uploadPhoto(
         @Param('nom') nom: string,
         @UploadedFile() file: Express.Multer.File
     ) {

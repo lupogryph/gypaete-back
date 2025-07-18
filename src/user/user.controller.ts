@@ -3,7 +3,7 @@ import {UserService} from "./user.service";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {ApiBearerAuth, ApiOkResponse, ApiTags} from "@nestjs/swagger";
-import {UserDto} from "./dto/user.dto";
+import {User} from "./entities/user.entity";
 
 @ApiBearerAuth()
 @ApiTags('user')
@@ -12,14 +12,14 @@ export class UserController {
     constructor(private readonly userService: UserService) {
     }
 
-    @ApiOkResponse({type: UserDto})
+    @ApiOkResponse({type: User})
     @Post()
     create(@Body() createUserDto: CreateUserDto) {
         delete createUserDto.role;
         return this.userService.create(createUserDto);
     }
 
-    @ApiOkResponse({type: UserDto})
+    @ApiOkResponse({type: User})
     @Get()
     find(@Request() req) {
         return this.userService.findById(req.user.id);
