@@ -8,32 +8,38 @@ import {FileInterceptor} from "@nestjs/platform-express";
 import {memoryStorage} from "multer";
 import {Express} from "express";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
+import {Public} from "../auth/public.decorator";
 
 @Controller('chambres')
 export class ChambresController {
     constructor(private readonly chambresService: ChambresService) {
     }
 
+    @ApiBearerAuth()
     @Post()
     create(@Body() createChambreDto: CreateChambreDto) {
         return this.chambresService.create(createChambreDto);
     }
 
+    @Public()
     @Get()
     findAll() {
         return this.chambresService.findAll();
     }
 
+    @Public()
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.chambresService.findOne(+id);
     }
 
+    @ApiBearerAuth()
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateChambreDto: UpdateChambreDto) {
         return this.chambresService.update(+id, updateChambreDto);
     }
 
+    @ApiBearerAuth()
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.chambresService.remove(+id);

@@ -33,8 +33,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
                 LitEntity,
                 LitChambreEntity,
                 PhotoEntity,
-                PrestationPayanteEntity,
                 ConditionEntity,
+                PrestationPayanteEntity,
             ],
         };
     }

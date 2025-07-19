@@ -8,6 +8,7 @@ import {ConfigType} from "@nestjs/config";
 import * as path from "node:path";
 import {promises as fs} from "node:fs";
 import {CreatePhotoDto} from "./dto/create-photo.dto";
+import {SpaceDto} from "./dto/space.dto";
 
 @Injectable()
 export class PhotoService {
@@ -62,12 +63,16 @@ export class PhotoService {
 
     async deletePhotoFs(id: string) {
         const filePath = path.join(__dirname, './files/images/photos', `${id}.jpg`);
-        await fs.unlink(filePath);
+        return this.deleteIfExists(filePath);
     }
 
     async deleteThumbnailFs(id: string) {
         const filePath = path.join(__dirname, './files/images/thumbnails', `${id}.jpg`);
-        await fs.unlink(filePath);
+        return this.deleteIfExists(filePath);
+    }
+
+    async deleteIfExists(filePath: string) {
+        return fs.stat(filePath).then(s => fs.unlink(filePath));
     }
 
     async createResizedPhoto(name: string, file: Buffer) {
@@ -102,14 +107,17 @@ export class PhotoService {
         return this.photoRepository.sum('size');
     }
 
-    async spaceLeft() {
-        const used = await this.usedSpace();
-        return this.config.photos_space - used;
+    async space() {
+        const space = new SpaceDto();
+        space.total = this.config.photos_space;
+        space.used = await this.usedSpace();
+        space.left = space.total - space.used;
+        return space;
     }
 
     async canUploadPhoto(size: number) {
-        const spaceLeft = await this.spaceLeft();
-        return size <= spaceLeft;
+        const space = await this.space();
+        return size <= space.left;
     }
 
 }

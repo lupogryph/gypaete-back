@@ -15,4 +15,7 @@ export class PhotoEntity {
     @Column()
     size: number;
 
+    @Column()
+    order: number;
+
 }

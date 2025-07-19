@@ -7,10 +7,10 @@ export class LitEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({nullable: true})
     classe: string;
 
-    @Column()
+    @Column({nullable: true})
     largeur: number;
 
     @OneToMany(() => LitChambreEntity, (l) => l.lit)

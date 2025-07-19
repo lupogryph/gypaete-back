@@ -32,7 +32,13 @@ export class ChambresService {
     }
 
     findAll() {
-        return this.chambreRepository.find({relations: this.all_relations});
+        return this.chambreRepository.createQueryBuilder()
+            .leftJoinAndSelect(q =>
+                    q.from(PhotoEntity, "photo")
+                        .orderBy("photo.order", "ASC").limit(1),
+                "photos",
+                "photos.chambreId = chambre.id")
+            .getMany();
     }
 
     findOne(numero: number) {

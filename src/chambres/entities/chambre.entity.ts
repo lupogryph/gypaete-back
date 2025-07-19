@@ -22,7 +22,7 @@ export class ChambreEntity {
     @Column({default: 1})
     mombrePersonnesMax: number;
 
-    @Column({type: "json"})
+    @Column({type: "json", nullable: true})
     description: FrEn;
 
     @Column({default: false})
@@ -31,44 +31,44 @@ export class ChambreEntity {
     @OneToMany(() => LitChambreEntity, (l) => l.chambre)
     lits: LitChambreEntity[];
 
-    @Column()
+    @Column({default: false})
     terasse: boolean;
 
-    @Column()
+    @Column({default: false})
     balcon: boolean;
 
-    @Column({type: "json"})
+    @Column({type: "json", nullable: true})
     vues: FrEn[];
 
-    @Column()
+    @Column({default: 0})
     salleDeBain: number;
 
     @Column({type: "enum", enum: BainDouche, default: null, nullable: true})
     bainDouche: BainDouche;
 
-    @Column()
+    @Column({default: 0})
     wc: number;
 
-    @Column()
+    @Column({default: false})
     tv: boolean;
 
-    @Column()
+    @Column({default: false})
     wifi: boolean;
 
-    @Column({type: "json"})
+    @Column({type: "json", nullable: true})
     autres: FrEn[];
 
-    @Column()
+    @Column({default: 0})
     nuitSupplementaireMinimum: number;
 
-    @Column()
+    @Column({default: 0})
     nuitSupplementaireCout: number;
 
     @ManyToMany(() => ConditionEntity)
     @JoinTable({name: "chambre_personnes_supplementaires"})
     personnesSupplementaires: ConditionEntity[];
 
-    @Column()
+    @Column({default: false})
     animauxAutorises: boolean;
 
     @ManyToMany(() => ConditionEntity)
