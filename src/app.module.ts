@@ -10,6 +10,7 @@ import {APP_INTERCEPTOR} from "@nestjs/core";
 import {ChaletModule} from "./chalet/chalet.module";
 import {TarifsModule} from "./tarifs/tarifs.module";
 import {PhotoModule} from "./photo/photo.module";
+import {ChambresModule} from './chambres/chambres.module';
 import appConfig from "./config/app.config";
 
 @Module({
@@ -25,6 +26,7 @@ import appConfig from "./config/app.config";
         ChaletModule,
         PhotoModule,
         TarifsModule,
+        ChambresModule,
     ],
     providers: [
         {provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor},

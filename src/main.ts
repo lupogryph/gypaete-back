@@ -3,9 +3,11 @@ import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import {AppModule} from "./app.module";
 import {ValidationPipe} from "@nestjs/common";
 import {ConfigService} from "@nestjs/config";
+import * as path from "node:path";
+import {NestExpressApplication} from "@nestjs/platform-express";
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
     const appConfig = app.get(ConfigService).get('app');
 
     app.enableCors();
@@ -16,6 +18,8 @@ async function bootstrap() {
             whitelist: true,
         }),
     );
+
+    app.useStaticAssets(path.join(__dirname, '..', 'files'), {prefix: '/files/'});
 
     // swagger
     const config = new DocumentBuilder()

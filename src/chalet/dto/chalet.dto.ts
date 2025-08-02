@@ -1,28 +1,13 @@
-import {ApiPropertyOptional} from "@nestjs/swagger";
-import {PrestationPayanteDto} from "../../tarifs/dto/prestation-payante.dto";
-import {FrEn} from "../../i18n/fren";
-import {IsArray, IsNumber, IsObject, IsString} from "class-validator";
+import {CreateChaletDto} from "./create-chalet.dto";
+import {ApiProperty} from "@nestjs/swagger";
+import {PeriodeDto} from "./periode.dto";
 
-export class ChaletDto {
+export class ChaletDto extends CreateChaletDto {
 
-    @ApiPropertyOptional()
-    @IsString()
-    nom: string;
+    @ApiProperty()
+    id: number;
 
-    @ApiPropertyOptional()
-    @IsObject()
-    description: FrEn;
-
-    @ApiPropertyOptional({type: [FrEn]})
-    @IsArray()
-    prestations: FrEn[];
-
-    @ApiPropertyOptional()
-    @IsNumber()
-    nombrePersonnesBase: number;
-
-    @ApiPropertyOptional({type: [PrestationPayanteDto]})
-    @IsArray()
-    prestationsPayantes: PrestationPayanteDto[];
+    @ApiProperty({type: [PeriodeDto]})
+    periodes: PeriodeDto[];
 
 }

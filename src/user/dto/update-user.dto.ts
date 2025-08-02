@@ -1,34 +1,28 @@
-import {PartialType} from "@nestjs/mapped-types";
 import {ApiPropertyOptional} from "@nestjs/swagger";
-import {CreateUserDto} from "./create-user.dto";
-import {IsEmail, IsOptional, IsStrongPassword, MaxLength, MinLength} from "class-validator";
+import {IsOptional} from "class-validator";
 import {Role} from "../../auth/roles.enum";
+import {CreateUserDto} from "./create-user.dto";
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
-
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsEmail()
-    email?: string;
+export class UpdateUserDto extends CreateUserDto {
 
     @ApiPropertyOptional()
     @IsOptional()
-    @MinLength(8)
-    @IsStrongPassword()
-    password?: string;
+    email: string;
 
     @ApiPropertyOptional()
     @IsOptional()
-    @MaxLength(20)
-    firstName?: string;
+    password: string;
 
     @ApiPropertyOptional()
     @IsOptional()
-    @MaxLength(20)
-    name?: string;
+    firstName: string;
 
-    @ApiPropertyOptional({name: 'role', enum: Role})
+    @ApiPropertyOptional()
     @IsOptional()
-    role?: Role;
+    name: string;
+
+    @ApiPropertyOptional({enum: Role})
+    @IsOptional()
+    role: Role;
 
 }

@@ -4,46 +4,78 @@ import {UpdateChaletDto} from "./dto/update-chalet.dto";
 import {PhotoService} from "../photo/photo.service";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ChaletEntity} from "./entities/chalet.entity";
-import {Repository} from "typeorm";
+import {DataSource, Repository} from "typeorm";
+import {FindOptionsRelations} from "typeorm/find-options/FindOptionsRelations";
+import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {PhotoEntity} from "../photo/entities/photo.entity";
 
 @Injectable()
 export class ChaletService {
+    all_relations: FindOptionsRelations<ChaletEntity> = {
+        photos: true,
+        animaux: true,
+        prestationsPayantes: true,
+        periodes: true
+    }
+
     constructor(
         @InjectRepository(ChaletEntity)
         private chaletRepository: Repository<ChaletEntity>,
+        private datasource: DataSource,
         private readonly photoService: PhotoService
     ) {
     }
 
-    async create(createChaletDto: CreateChaletDto) {
-        return this.chaletRepository.save(createChaletDto);
+    create(createChaletDto: CreateChaletDto) {
+        const chalet = this.chaletRepository.create(createChaletDto);
+        chalet.id = 1;
+        return this.chaletRepository.save(chalet);
     }
 
-    findAll() {
-        return this.chaletRepository.find();
+    findOne(id: number) {
+        return this.chaletRepository.findOne({where: {id: id}, relations: this.all_relations});
     }
 
-    findOne(nom: string) {
-        return this.chaletRepository.findOneBy({nom: nom});
+    update(updateChaletDto: UpdateChaletDto) {
+        const chalet = this.chaletRepository.create(updateChaletDto);
+        return this.chaletRepository.save(chalet);
     }
 
-    update(nom: string, updateChaletDto: UpdateChaletDto) {
-        return this.chaletRepository.update(nom, updateChaletDto);
+    async remove(id: number) {
+        await this.deletePhotos(id);
+        return this.chaletRepository.delete(id);
     }
 
-    remove(nom: string) {
-        return this.chaletRepository.delete(nom);
+    async uploadPhoto(id: number, file: Buffer) {
+        const photo = await this.photoService.uploadToEntity(file);
+        return this.savePhoto(id, photo);
     }
 
-    async uploadPhoto(nom: string, file: Buffer) {
-        const chalet = await this.chaletRepository.findOneBy({nom: nom});
-        if (!chalet) {
-            throw new Error(`Chalet with name ${nom} not found`);
-        }
-        const photo = new PhotoEntity();
-        photo.chalet = chalet;
-        return this.photoService.uploadPhoto(photo, file);
+    addPhoto(id: number, photo: CreatePhotoDto) {
+        const photoEntity = this.photoService.addToEntity(photo);
+        return this.savePhoto(id, photoEntity);
+    }
+
+    async savePhoto(id: number, photo: PhotoEntity) {
+        return this.datasource.transaction(async (manager) => {
+            const savedPhoto = await manager.save(photo);
+            await manager.createQueryBuilder()
+                .relation(ChaletEntity, "photos")
+                .of(id)
+                .add(savedPhoto.id);
+        }).catch(error => this.photoService.deletePhoto(photo.id));
+    }
+
+    // todo: maybe do this in transaction ?
+    async deletePhotos(id: number) {
+        return this.chaletRepository.findOne({
+            where: {id: id},
+            select: {photos: true},
+            relations: {photos: true}
+        })
+            .then(c => Promise.all(
+                c.photos.map(photo => this.photoService.deletePhoto(photo.id))
+            ));
     }
 
 }

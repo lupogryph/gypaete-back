@@ -5,8 +5,12 @@ import {User} from "../user/entities/user.entity";
 import {ChaletEntity} from "../chalet/entities/chalet.entity";
 import {PhotoEntity} from "../photo/entities/photo.entity";
 import {PrestationPayanteEntity} from "../tarifs/entities/prestation-payante.entity";
-import {AnimalEntity} from "../tarifs/entities/animal.entity";
+import {ConditionEntity} from "../tarifs/entities/condition.entity";
 import databaseConfig from "./database.config";
+import {ChambreEntity} from "../chambres/entities/chambre.entity";
+import {LitEntity} from "../chambres/entities/lit.entity";
+import {PeriodeEntity} from "../chalet/entities/periode.entity";
+import {LitChambreEntity} from "../chambres/entities/lit-chambre.entity";
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -24,9 +28,13 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             entities: [
                 User,
                 ChaletEntity,
+                PeriodeEntity,
+                ChambreEntity,
+                LitEntity,
+                LitChambreEntity,
                 PhotoEntity,
+                ConditionEntity,
                 PrestationPayanteEntity,
-                AnimalEntity,
             ],
         };
     }
