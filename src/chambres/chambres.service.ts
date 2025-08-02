@@ -1,10 +1,9 @@
 import {Injectable} from '@nestjs/common';
 import {CreateChambreDto} from './dto/create-chambre.dto';
 import {UpdateChambreDto} from './dto/update-chambre.dto';
-import * as Buffer from "node:buffer";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ChambreEntity} from "./entities/chambre.entity";
-import {Repository} from "typeorm";
+import {DataSource, Repository} from "typeorm";
 import {PhotoService} from "../photo/photo.service";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {PhotoEntity} from "../photo/entities/photo.entity";
@@ -23,6 +22,7 @@ export class ChambresService {
     constructor(
         @InjectRepository(ChambreEntity)
         private chambreRepository: Repository<ChambreEntity>,
+        private datasource: DataSource,
         private readonly photoService: PhotoService
     ) {
     }
@@ -45,29 +45,47 @@ export class ChambresService {
         return this.chambreRepository.findOne({where: {numero: numero}, relations: this.all_relations});
     }
 
-    update(id: number, updateChambreDto: UpdateChambreDto) {
-        return `This action updates a #${id} chambre`;
+    update(numero: number, updateChambreDto: UpdateChambreDto) {
+        return `This action updates a #${numero} chambre`;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} chambre`;
+    remove(numero: number) {
+        return `This action removes a #${numero} chambre`;
     }
 
-    async uploadPhoto(id: number, file: Buffer) {
-        const photoEntity = await this.photoService.uploadToEntity(file);
-        return this.savePhoto(id, photoEntity);
+    async uploadPhoto(numero: number, file: Buffer) {
+        const photo = await this.photoService.uploadToEntity(file);
+        return this.savePhoto(numero, photo);
     }
 
-    addPhoto(id: number, photo: CreatePhotoDto) {
+    addPhoto(numero: number, photo: CreatePhotoDto) {
         const photoEntity = this.photoService.addToEntity(photo);
-        return this.savePhoto(id, photoEntity);
+        return this.savePhoto(numero, photoEntity);
     }
 
-    savePhoto(id: number, photo: PhotoEntity) {
-        return this.chambreRepository.manager
-            .createQueryBuilder()
-            .relation("photo")
-            .of(id)
-            .add(photo);
+    async savePhoto(numero: number, photo: PhotoEntity) {
+        try {
+            return await this.datasource.transaction(async (manager) => {
+                const savedPhoto = await manager.save(photo);
+                await manager.createQueryBuilder()
+                    .relation(ChambreEntity, "photos")
+                    .of(numero)
+                    .add(savedPhoto.id);
+            });
+        } catch (error) {
+            return await this.photoService.deletePhoto(photo.id);
+        }
+    }
+
+    // todo : maybe do this in transaction ?
+    async deletePhotos(numero: number) {
+        return this.chambreRepository.findOne({
+            where: {numero: numero},
+            select: {photos: true},
+            relations: {photos: true}
+        })
+            .then(c => Promise.all(
+                c.photos.map(photo => this.photoService.deletePhoto(photo.id))
+            ));
     }
 }

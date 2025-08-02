@@ -13,6 +13,7 @@ export class UserController {
     constructor(private readonly userService: UserService) {
     }
 
+    // todo: remove this method as only admin should be able to create users
     @ApiOkResponse({type: UserDto})
     @Public() // todo: remove this decorator when user registration is not needed
     @Post()

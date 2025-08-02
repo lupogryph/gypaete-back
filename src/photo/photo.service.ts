@@ -9,9 +9,12 @@ import * as path from "node:path";
 import {promises as fs} from "node:fs";
 import {CreatePhotoDto} from "./dto/create-photo.dto";
 import {SpaceDto} from "./dto/space.dto";
+import {v4 as uuidv4} from 'uuid';
 
 @Injectable()
 export class PhotoService {
+    photosPath = 'files/images/photos';
+    thumbnailsPath = 'files/images/thumbnails';
 
     constructor(
         @InjectRepository(PhotoEntity)
@@ -22,28 +25,23 @@ export class PhotoService {
     }
 
     addToEntity(photo: CreatePhotoDto) {
-        const photoEntity = new PhotoEntity();
-        photoEntity.url = photo.url;
-        photoEntity.thumbnailUrl = photo.thumbnailUrl;
-        return photoEntity;
+        return this.photoRepository.create({id: uuidv4(), ...photo});
     }
 
-    async uploadToEntity(file: Buffer): Promise<PhotoEntity> {
+    async uploadToEntity(file: Buffer) {
         if (!file) {
             throw new InternalServerErrorException('No file provided');
         }
-        const photoEntity = new PhotoEntity();
-        const filesUrl = `${this.baseUrl()}/files`;
+        const photoEntity = this.photoRepository.create({id: uuidv4()});
+        console.log("photoEntity", JSON.stringify(photoEntity, null, 2));
         const photo = await this.createResizedPhoto(photoEntity.id, file);
         const thumb = await this.createThumbnail(photoEntity.id, file);
         photoEntity.size = photo.size + thumb.size;
         if (!(await this.canUploadPhoto(photoEntity.size))) {
             throw new HttpException('Not enough space to upload photo', 507); // Insufficient Storage
         }
-        photo.save.then();
-        photoEntity.url = `${filesUrl}${photo.path}`;
-        thumb.save.then();
-        photoEntity.thumbnailUrl = `${filesUrl}${thumb.path}`;
+        photoEntity.url = `${this.baseUrl()}/${photo.path}`;
+        photoEntity.thumbnailUrl = `${this.baseUrl()}/${thumb.path}`;
         return photoEntity;
     }
 
@@ -62,12 +60,12 @@ export class PhotoService {
     }
 
     async deletePhotoFs(id: string) {
-        const filePath = path.join(__dirname, './files/images/photos', `${id}.jpg`);
+        const filePath = path.join(__dirname, '..', this.photosPath, `${id}.jpg`);
         return this.deleteIfExists(filePath);
     }
 
     async deleteThumbnailFs(id: string) {
-        const filePath = path.join(__dirname, './files/images/thumbnails', `${id}.jpg`);
+        const filePath = path.join(__dirname, '..', this.thumbnailsPath, `${id}.jpg`);
         return this.deleteIfExists(filePath);
     }
 
@@ -76,21 +74,25 @@ export class PhotoService {
     }
 
     async createResizedPhoto(name: string, file: Buffer) {
-        const path = `/images/photos/${name}.jpg`
+        const path = `${this.photosPath}/${name}.jpg`
         const image = await Jimp.read(file);
-        image.resize(image.height >= image.height ? {w: 1024} : {h: 1024});// Resize based on height or width
+        if (image.height > 1024 || image.width > 1024) {
+            image.resize(image.height >= image.height ? {w: 1024} : {h: 1024}); // Resize based on height or width
+        }
         const size = await this.getImageSizeInKB(image);
-        const save = image.write(`.${path}`);
-        return {path: path, size: size, save: save};
+        const save = image.write(`${this.photosPath}/${name}.jpg`);
+        return {path: path, size: size};
     }
 
     async createThumbnail(name: string, file: Buffer) {
-        const path = `/images/thumbnails/${name}.jpg`
+        const path = `${this.thumbnailsPath}/${name}.jpg`
         const image = await Jimp.read(file);
-        image.resize({h: 320}); // Resize to 320px height, auto width
+        if (image.height > 320) {
+            image.resize({h: 320}); // Resize to 320px height, auto width
+        }
         const size = await this.getImageSizeInKB(image);
-        const save = image.write(`.${path}`);
-        return {path: path, size: size, save: save};
+        const save = image.write(`${this.thumbnailsPath}/${name}.jpg`);
+        return {path: path, size: size};
     }
 
     baseUrl(): string {

@@ -1,0 +1,825 @@
+openapi: 3.0.0
+paths:
+  /auth:
+    post:
+      operationId: AuthController_login
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - auth
+    get:
+      operationId: AuthController_profile
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - auth
+  /user:
+    post:
+      operationId: UserController_create
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+      security:
+        - bearer: [ ]
+      tags:
+        - user
+    get:
+      operationId: UserController_find
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+      security:
+        - bearer: [ ]
+      tags:
+        - user
+    patch:
+      operationId: UserController_update
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - user
+    delete:
+      operationId: UserController_remove
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - user
+  /admin/user:
+    post:
+      operationId: UserAdminController_create
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        - bearer: [ ]
+      tags:
+        - admin
+    get:
+      operationId: UserAdminController_findAll
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      security:
+        - bearer: [ ]
+      tags:
+        - admin
+  /admin/user/{id}:
+    get:
+      operationId: UserAdminController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      security:
+        - bearer: [ ]
+      tags:
+        - admin
+    patch:
+      operationId: UserAdminController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - admin
+  /admin/user/{email}:
+    delete:
+      operationId: UserAdminController_remove
+      parameters:
+        - name: email
+          required: true
+          in: path
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - admin
+  /chalet:
+    post:
+      operationId: ChaletController_create
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChaletDto'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChaletDto'
+      security:
+        - bearer: [ ]
+      tags:
+        - Chalet
+    get:
+      operationId: ChaletController_find
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChaletDto'
+      tags:
+        - Chalet
+    patch:
+      operationId: ChaletController_update
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateChaletDto'
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - Chalet
+    delete:
+      operationId: ChaletController_remove
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - Chalet
+  /chalet/photo:
+    put:
+      operationId: ChaletController_uploadPhoto
+      parameters: [ ]
+      requestBody:
+        required: true
+        description: photo
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadDto'
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - Chalet
+  /photo/space:
+    get:
+      operationId: PhotoController_getSpace
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceDto'
+      security:
+        - bearer: [ ]
+      tags:
+        - Photo
+  /photo/{id}:
+    delete:
+      operationId: PhotoController_deletePhoto
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - Photo
+  /chambres:
+    post:
+      operationId: ChambresController_create
+      parameters: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChambreDto'
+      responses:
+        '201':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - Chambres
+    get:
+      operationId: ChambresController_findAll
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Chambres
+  /chambres/{id}:
+    get:
+      operationId: ChambresController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - Chambres
+    patch:
+      operationId: ChambresController_update
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateChambreDto'
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - Chambres
+    delete:
+      operationId: ChambresController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - Chambres
+  /chambres/{id}/photo:
+    put:
+      operationId: ChambresController_uploadPhoto
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        description: photo
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadDto'
+      responses:
+        '200':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - Chambres
+    post:
+      operationId: ChambresController_addPhoto
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePhotoDto'
+      responses:
+        '201':
+          description: ''
+      security:
+        - bearer: [ ]
+      tags:
+        - Chambres
+info:
+  title: Chalet API
+  description: API
+  version: 1.1.0
+  contact: { }
+tags: [ ]
+servers: [ ]
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    LoginDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    CreateUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        firstName:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum:
+            - user
+            - admin
+      required:
+        - email
+        - password
+        - firstName
+        - name
+    UserDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        firstName:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum:
+            - user
+            - admin
+        id:
+          type: number
+      required:
+        - email
+        - password
+        - firstName
+        - name
+        - id
+    UpdateUserDto:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        firstName:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum:
+            - user
+            - admin
+    User:
+      type: object
+      properties: { }
+    FrEn:
+      type: object
+      properties:
+        fr:
+          type: string
+        en:
+          type: string
+      required:
+        - fr
+    ConditionDto:
+      type: object
+      properties:
+        condition:
+          $ref: '#/components/schemas/FrEn'
+        cout:
+          type: number
+          minimum: 0
+        par:
+          type: string
+          enum:
+            - jour
+            - nuit
+            - semaine
+      required:
+        - condition
+        - cout
+    PrestationPayanteDto:
+      type: object
+      properties:
+        condition:
+          $ref: '#/components/schemas/FrEn'
+        cout:
+          type: number
+          minimum: 0
+        par:
+          type: string
+          enum:
+            - jour
+            - nuit
+            - semaine
+        parPersonne:
+          type: boolean
+      required:
+        - condition
+        - cout
+    CreateChaletDto:
+      type: object
+      properties:
+        nom:
+          type: string
+        description:
+          $ref: '#/components/schemas/FrEn'
+        prestations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrEn'
+        nombrePersonnesBase:
+          type: number
+        periodes:
+          type: array
+          items:
+            type: string
+        animauxAutorises:
+          type: boolean
+        animaux:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConditionDto'
+        prestationsPayantes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrestationPayanteDto'
+      required:
+        - nom
+    PeriodeDto:
+      type: object
+      properties:
+        dateDebut:
+          format: date-time
+          type: string
+        dateFin:
+          format: date-time
+          type: string
+        cout:
+          type: number
+        par:
+          type: string
+          enum:
+            - jour
+            - nuit
+            - semaine
+      required:
+        - dateDebut
+        - dateFin
+        - cout
+    ChaletDto:
+      type: object
+      properties:
+        nom:
+          type: string
+        description:
+          $ref: '#/components/schemas/FrEn'
+        prestations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrEn'
+        nombrePersonnesBase:
+          type: number
+        periodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PeriodeDto'
+        animauxAutorises:
+          type: boolean
+        animaux:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConditionDto'
+        prestationsPayantes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrestationPayanteDto'
+        id:
+          type: number
+      required:
+        - nom
+        - id
+    UpdateChaletDto:
+      type: object
+      properties:
+        nom:
+          type: string
+        description:
+          $ref: '#/components/schemas/FrEn'
+        prestations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrEn'
+        nombrePersonnesBase:
+          type: number
+        periodes:
+          type: array
+          items:
+            type: string
+        animauxAutorises:
+          type: boolean
+        animaux:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConditionDto'
+        prestationsPayantes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrestationPayanteDto'
+        id:
+          type: number
+      required:
+        - id
+    UploadDto:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+      required:
+        - file
+    SpaceDto:
+      type: object
+      properties:
+        total:
+          type: number
+        used:
+          type: number
+        left:
+          type: number
+      required:
+        - total
+        - used
+        - left
+    CreateChambreDto:
+      type: object
+      properties:
+        nom:
+          type: string
+        description:
+          $ref: '#/components/schemas/FrEn'
+        prestations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrEn'
+        nombrePersonnesBase:
+          type: number
+        periodes:
+          type: array
+          items:
+            type: string
+        animauxAutorises:
+          type: boolean
+        animaux:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConditionDto'
+        prestationsPayantes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrestationPayanteDto'
+        mombrePersonnesMax:
+          type: number
+        pmr:
+          type: boolean
+        lits:
+          type: object
+        terasse:
+          type: boolean
+        balcon:
+          type: boolean
+        vues:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrEn'
+        salleDeBain:
+          type: number
+        bainDouche:
+          type: string
+          enum:
+            - baignoire
+            - douche
+        wc:
+          type: number
+        tv:
+          type: boolean
+        wifi:
+          type: boolean
+        autres:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrEn'
+        nuitSupplementaireMinimum:
+          type: number
+        nuitSupplementaireCout:
+          type: number
+        personnesSupplementaires:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConditionDto'
+      required:
+        - nom
+    UpdateChambreDto:
+      type: object
+      properties:
+        nom:
+          type: string
+        description:
+          $ref: '#/components/schemas/FrEn'
+        prestations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrEn'
+        nombrePersonnesBase:
+          type: number
+        periodes:
+          type: array
+          items:
+            type: string
+        animauxAutorises:
+          type: boolean
+        animaux:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConditionDto'
+        prestationsPayantes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrestationPayanteDto'
+        mombrePersonnesMax:
+          type: number
+        pmr:
+          type: boolean
+        lits:
+          type: object
+        terasse:
+          type: boolean
+        balcon:
+          type: boolean
+        vues:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrEn'
+        salleDeBain:
+          type: number
+        bainDouche:
+          type: string
+          enum:
+            - baignoire
+            - douche
+        wc:
+          type: number
+        tv:
+          type: boolean
+        wifi:
+          type: boolean
+        autres:
+          type: array
+          items:
+            $ref: '#/components/schemas/FrEn'
+        nuitSupplementaireMinimum:
+          type: number
+        nuitSupplementaireCout:
+          type: number
+        personnesSupplementaires:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConditionDto'
+        numero:
+          type: number
+      required:
+        - nom
+        - numero
+    CreatePhotoDto:
+      type: object
+      properties:
+        url:
+          type: string
+        thumbnailUrl:
+          type: string
+      required:
+        - url
+        - thumbnailUrl

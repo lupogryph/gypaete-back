@@ -1,9 +1,9 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, PrimaryColumn} from "typeorm";
 
 @Entity("photo")
 export class PhotoEntity {
 
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn('uuid')
     id: string;
 
     @Column()
@@ -14,8 +14,5 @@ export class PhotoEntity {
 
     @Column()
     size: number;
-
-    @Column()
-    order: number;
 
 }

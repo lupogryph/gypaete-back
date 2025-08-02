@@ -9,6 +9,7 @@ import {ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse} from "@nestjs/swagge
 import {UploadDto} from "../photo/dto/upload.dto";
 import {ChaletDto} from "./dto/chalet.dto";
 import {Public} from "../auth/public.decorator";
+import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 
 @Controller('chalet')
 export class ChaletController {
@@ -54,4 +55,11 @@ export class ChaletController {
     ) {
         return this.chaletService.uploadPhoto(1, file.buffer);
     }
+
+    @ApiBearerAuth()
+    @Post('/photo')
+    addPhoto(@Body() photo: CreatePhotoDto) {
+        return this.chaletService.addPhoto(1, photo);
+    }
+
 }

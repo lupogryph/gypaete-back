@@ -17,7 +17,7 @@ export class ChaletEntity {
     @Column({type: "json", nullable: true})
     description: FrEn;
 
-    @ManyToMany(() => PhotoEntity)
+    @ManyToMany(type => PhotoEntity, {cascade: ["insert", "update", "remove"], eager: true})
     @JoinTable({name: "chalet_photo"})
     photos: PhotoEntity[];
 

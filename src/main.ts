@@ -19,7 +19,7 @@ async function bootstrap() {
         }),
     );
 
-    app.useStaticAssets(path.join(__dirname, '..', 'files'));
+    app.useStaticAssets(path.join(__dirname, '..', 'files'), {prefix: '/files/'});
 
     // swagger
     const config = new DocumentBuilder()

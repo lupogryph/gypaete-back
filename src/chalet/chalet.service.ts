@@ -4,8 +4,10 @@ import {UpdateChaletDto} from "./dto/update-chalet.dto";
 import {PhotoService} from "../photo/photo.service";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ChaletEntity} from "./entities/chalet.entity";
-import {Repository} from "typeorm";
+import {DataSource, Repository} from "typeorm";
 import {FindOptionsRelations} from "typeorm/find-options/FindOptionsRelations";
+import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
+import {PhotoEntity} from "../photo/entities/photo.entity";
 
 @Injectable()
 export class ChaletService {
@@ -19,6 +21,7 @@ export class ChaletService {
     constructor(
         @InjectRepository(ChaletEntity)
         private chaletRepository: Repository<ChaletEntity>,
+        private datasource: DataSource,
         private readonly photoService: PhotoService
     ) {
     }
@@ -35,7 +38,6 @@ export class ChaletService {
 
     update(updateChaletDto: UpdateChaletDto) {
         const chalet = this.chaletRepository.create(updateChaletDto);
-        console.log(JSON.stringify(chalet, null, 2));
         return this.chaletRepository.save(chalet);
     }
 
@@ -45,18 +47,34 @@ export class ChaletService {
     }
 
     async uploadPhoto(id: number, file: Buffer) {
-        const photoEntity = await this.photoService.uploadToEntity(file);
-        return this.chaletRepository.manager
-            .createQueryBuilder()
-            .relation("photo")
-            .of(id)
-            .add(photoEntity);
+        const photo = await this.photoService.uploadToEntity(file);
+        return this.savePhoto(id, photo);
     }
 
+    addPhoto(id: number, photo: CreatePhotoDto) {
+        const photoEntity = this.photoService.addToEntity(photo);
+        return this.savePhoto(id, photoEntity);
+    }
+
+    async savePhoto(id: number, photo: PhotoEntity) {
+        return this.datasource.transaction(async (manager) => {
+            const savedPhoto = await manager.save(photo);
+            await manager.createQueryBuilder()
+                .relation(ChaletEntity, "photos")
+                .of(id)
+                .add(savedPhoto.id);
+        }).catch(error => this.photoService.deletePhoto(photo.id));
+    }
+
+    // todo: maybe do this in transaction ?
     async deletePhotos(id: number) {
-        return this.chaletRepository.findOne({where: {id: id}, select: {photos: true}, relations: {photos: true}})
-            .then(chalet => Promise.all(
-                chalet.photos.map(photo => this.photoService.deletePhoto(photo.id))
+        return this.chaletRepository.findOne({
+            where: {id: id},
+            select: {photos: true},
+            relations: {photos: true}
+        })
+            .then(c => Promise.all(
+                c.photos.map(photo => this.photoService.deletePhoto(photo.id))
             ));
     }
 
