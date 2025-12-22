@@ -1,6 +1,6 @@
 import {Controller, Get, Post, Request, UseGuards} from "@nestjs/common";
 import {AuthService} from "./auth.service";
-import {ApiBearerAuth, ApiBody, ApiConsumes, ApiProperty, ApiTags} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiProperty, ApiTags} from "@nestjs/swagger";
 import {LocalAuthGuard} from "./local-auth.guard";
 import {Public} from "./public.decorator";
 
@@ -17,6 +17,17 @@ export class AuthController {
     constructor(private authService: AuthService) {
     }
 
+    @ApiOkResponse({
+        schema: {
+            type: 'object',
+            properties: {
+                access_token: {
+                    type: 'string',
+                },
+            },
+            required: ['access_token'],
+        },
+    })
     @ApiConsumes('application/x-www-form-urlencoded')
     @ApiBody({type: LoginDto})
     @UseGuards(LocalAuthGuard)
