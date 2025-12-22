@@ -8,7 +8,7 @@ import {Role} from "../auth/roles.enum";
 import {User} from "./entities/user.entity";
 
 @ApiBearerAuth()
-@ApiTags('admin')
+@ApiTags('user')
 @Controller('admin/user')
 export class UserAdminController {
     constructor(private readonly userService: UserService) {

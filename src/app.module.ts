@@ -11,6 +11,8 @@ import {ChaletModule} from "./chalet/chalet.module";
 import {TarifsModule} from "./tarifs/tarifs.module";
 import {PhotoModule} from "./photo/photo.module";
 import {ChambresModule} from './chambres/chambres.module';
+import { ContactModule } from './contact/contact.module';
+import { SocialModule } from './social/social.module';
 import appConfig from "./config/app.config";
 
 @Module({
@@ -27,6 +29,8 @@ import appConfig from "./config/app.config";
         PhotoModule,
         TarifsModule,
         ChambresModule,
+        ContactModule,
+        SocialModule,
     ],
     providers: [
         {provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor},

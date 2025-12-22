@@ -36,9 +36,9 @@ export class ChaletService {
         return this.chaletRepository.findOne({where: {id: id}, relations: this.all_relations});
     }
 
-    update(updateChaletDto: UpdateChaletDto) {
+    update(id: number, updateChaletDto: UpdateChaletDto) {
         const chalet = this.chaletRepository.create(updateChaletDto);
-        return this.chaletRepository.save(chalet);
+        return this.chaletRepository.update(id, chalet);
     }
 
     async remove(id: number) {

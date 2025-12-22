@@ -21,18 +21,19 @@ export class ChambresService {
 
     constructor(
         @InjectRepository(ChambreEntity)
-        private chambreRepository: Repository<ChambreEntity>,
+        private repository: Repository<ChambreEntity>,
         private datasource: DataSource,
         private readonly photoService: PhotoService
     ) {
     }
 
     create(createChambreDto: CreateChambreDto) {
-        return this.chambreRepository.create(createChambreDto);
+        const chambre = this.repository.create(createChambreDto);
+        return this.repository.save(chambre);
     }
 
     findAll() {
-        return this.chambreRepository.createQueryBuilder()
+        return this.repository.createQueryBuilder()
             .leftJoinAndSelect(q =>
                     q.from(PhotoEntity, "photo")
                         .orderBy("photo.order", "ASC").limit(1),
@@ -42,15 +43,16 @@ export class ChambresService {
     }
 
     findOne(numero: number) {
-        return this.chambreRepository.findOne({where: {numero: numero}, relations: this.all_relations});
+        return this.repository.findOne({where: {numero: numero}, relations: this.all_relations});
     }
 
     update(numero: number, updateChambreDto: UpdateChambreDto) {
-        return `This action updates a #${numero} chambre`;
+        const chambre = this.repository.create(updateChambreDto);
+        return this.repository.update(numero, chambre);
     }
 
     remove(numero: number) {
-        return `This action removes a #${numero} chambre`;
+        return this.repository.delete(numero);
     }
 
     async uploadPhoto(numero: number, file: Buffer) {
@@ -79,7 +81,7 @@ export class ChambresService {
 
     // todo : maybe do this in transaction ?
     async deletePhotos(numero: number) {
-        return this.chambreRepository.findOne({
+        return this.repository.findOne({
             where: {numero: numero},
             select: {photos: true},
             relations: {photos: true}

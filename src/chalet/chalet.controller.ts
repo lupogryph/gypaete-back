@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Patch, Post, Put, UploadedFile, UseInterceptors} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UseInterceptors} from "@nestjs/common";
 import {ChaletService} from "./chalet.service";
 import {CreateChaletDto} from "./dto/create-chalet.dto";
 import {UpdateChaletDto} from "./dto/update-chalet.dto";
@@ -32,10 +32,11 @@ export class ChaletController {
         return this.chaletService.findOne(1);
     }
 
+    @ApiOkResponse({type: ChaletDto})
     @ApiBearerAuth()
     @Patch()
     update(@Body() updateChaletDto: UpdateChaletDto) {
-        return this.chaletService.update(updateChaletDto);
+        return this.chaletService.update(1, updateChaletDto);
     }
 
     @ApiBearerAuth()

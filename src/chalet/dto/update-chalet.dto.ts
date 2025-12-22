@@ -4,10 +4,6 @@ import {IsNumber} from "class-validator";
 
 export class UpdateChaletDto extends CreateChaletDto {
 
-    @ApiProperty()
-    @IsNumber()
-    id: number;
-
     @ApiPropertyOptional()
     nom: string;
 
