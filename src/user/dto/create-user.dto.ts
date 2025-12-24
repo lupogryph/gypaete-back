@@ -24,7 +24,7 @@ export class CreateUserDto {
     @MaxLength(20)
     name: string;
 
-    @ApiPropertyOptional({enum: Role})
+    @ApiPropertyOptional({enum: Role, enumName: 'Role'})
     role: Role;
 
 }

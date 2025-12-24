@@ -17,7 +17,7 @@ export class CreatePeriodeDto {
     @Min(0)
     cout: number;
 
-    @ApiPropertyOptional({enum: Temporalite})
+    @ApiPropertyOptional({enum: Temporalite, enumName: 'Temporalite'})
     @IsOptional()
     par: Temporalite;
 

@@ -13,7 +13,7 @@ export class ConditionDto {
     @IsNumber()
     cout: number;
 
-    @ApiPropertyOptional({enum: Temporalite})
+    @ApiPropertyOptional({enum: Temporalite, enumName: 'Temporalite'})
     @IsEnum(Temporalite)
     par: Temporalite;
 

@@ -21,7 +21,7 @@ export class UpdateUserDto extends CreateUserDto {
     @IsOptional()
     name: string;
 
-    @ApiPropertyOptional({enum: Role})
+    @ApiPropertyOptional({enum: Role, enumName: 'Role'})
     @IsOptional()
     role: Role;
 

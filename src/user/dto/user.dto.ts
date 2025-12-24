@@ -7,7 +7,7 @@ export class UserDto extends CreateUserDto {
     @ApiProperty()
     id: number;
 
-    @ApiProperty({enum: Role})
+    @ApiProperty({enum: Role, enumName: 'Role'})
     role: Role
 
 }
