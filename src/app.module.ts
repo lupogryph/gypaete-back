@@ -6,7 +6,6 @@ import {UserModule} from "./user/user.module";
 import databaseConfig from "./database/database.config";
 import {TypeOrmConfigService} from "./database/typeorm.config.service";
 import jwtConfig from "./auth/jwt.config";
-import {APP_INTERCEPTOR} from "@nestjs/core";
 import {ChaletModule} from "./chalet/chalet.module";
 import {TarifsModule} from "./tarifs/tarifs.module";
 import {PhotoModule} from "./photo/photo.module";
@@ -14,6 +13,8 @@ import {ChambresModule} from './chambres/chambres.module';
 import { ContactModule } from './contact/contact.module';
 import { SocialModule } from './social/social.module';
 import appConfig from "./config/app.config";
+import * as classTransformer from 'class-transformer';
+import {APP_INTERCEPTOR, Reflector} from "@nestjs/core";
 
 @Module({
     imports: [
@@ -33,7 +34,14 @@ import appConfig from "./config/app.config";
         SocialModule,
     ],
     providers: [
-        {provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor},
+        {
+            provide: APP_INTERCEPTOR,
+            useFactory: (reflector: Reflector) =>
+                new ClassSerializerInterceptor(reflector, {
+                    transformerPackage: classTransformer,
+                }),
+            inject: [Reflector],
+        },
     ],
 })
 export class AppModule {

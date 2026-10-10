@@ -1,4 +1,5 @@
 import {Column, Entity, JoinColumn, ManyToOne, PrimaryColumn} from "typeorm";
+import type {Relation} from 'typeorm';
 import {ChambreEntity} from "./chambre.entity";
 import {LitEntity} from "./lit.entity";
 
@@ -10,14 +11,14 @@ export class LitChambreEntity {
 
     @ManyToOne(() => LitEntity, (lit) => lit.chambres)
     @JoinColumn({name: "litId", referencedColumnName: "id"})
-    lit: LitEntity;
+    lit: Relation<LitEntity>;
 
     @PrimaryColumn()
     chambreNumero: number;
 
     @ManyToOne(() => ChambreEntity, (chambre) => chambre.lits)
     @JoinColumn({name: "chambreNumero", referencedColumnName: "numero"})
-    chambre: ChambreEntity;
+    chambre: Relation<ChambreEntity>;
 
     @Column({default: 1})
     nombre: number
