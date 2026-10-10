@@ -1,5 +1,5 @@
 import {Inject, Injectable} from "@nestjs/common";
-import {ConfigType} from "@nestjs/config";
+import type {ConfigType} from "@nestjs/config";
 import {TypeOrmModuleOptions, TypeOrmOptionsFactory} from "@nestjs/typeorm";
 import {User} from "../user/entities/user.entity";
 import {ChaletEntity} from "../chalet/entities/chalet.entity";
@@ -13,6 +13,7 @@ import {PeriodeEntity} from "../chalet/entities/periode.entity";
 import {LitChambreEntity} from "../chambres/entities/lit-chambre.entity";
 import {ContactEntity} from "../contact/entities/contact.entity";
 import {SocialEntity} from "../social/entities/social.entity";
+import pg from 'pg';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -26,7 +27,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     createTypeOrmOptions(): TypeOrmModuleOptions {
         return {
             ...this.config,
-            type: 'mariadb',
+            type: 'postgres',
+            driver: pg,
             entities: [
                 User,
                 ChaletEntity,

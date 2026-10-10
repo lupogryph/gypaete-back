@@ -1,4 +1,5 @@
-import {Column, Entity, ManyToOne, PrimaryColumn} from "typeorm";
+import {Column, Entity, ManyToOne, PrimaryColumn} from 'typeorm';
+import type {Relation} from 'typeorm'
 import {ChaletEntity} from "./chalet.entity";
 import {Temporalite} from "../../tarifs/types/temporalite.enum";
 
@@ -18,6 +19,6 @@ export class PeriodeEntity {
     par: Temporalite;
 
     @ManyToOne(() => ChaletEntity, (chalet) => chalet.periodes)
-    chalet: ChaletEntity;
+    chalet: Relation<ChaletEntity>;
 
 }

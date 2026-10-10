@@ -5,6 +5,8 @@ import {ValidationPipe} from "@nestjs/common";
 import {ConfigService} from "@nestjs/config";
 import * as path from "node:path";
 import {NestExpressApplication} from "@nestjs/platform-express";
+import * as classTransformer from 'class-transformer';
+import * as classValidator from 'class-validator';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -16,7 +18,9 @@ async function bootstrap() {
         new ValidationPipe({
             transform: true,
             whitelist: true,
-        }),
+            transformerPackage: classTransformer,
+            validatorPackage: classValidator,
+        })
     );
 
     app.useStaticAssets(path.join(__dirname, '..', 'files'), {prefix: '/files/'});

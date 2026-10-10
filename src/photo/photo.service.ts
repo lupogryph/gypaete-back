@@ -4,12 +4,12 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Jimp} from "jimp";
 import {Repository} from "typeorm";
 import appConfig from "../config/app.config";
-import {ConfigType} from "@nestjs/config";
+import type {ConfigType} from "@nestjs/config";
 import * as path from "node:path";
 import {promises as fs} from "node:fs";
 import {CreatePhotoDto} from "./dto/create-photo.dto";
 import {SpaceDto} from "./dto/space.dto";
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuid4} from 'uuid';
 
 @Injectable()
 export class PhotoService {
@@ -25,14 +25,14 @@ export class PhotoService {
     }
 
     addToEntity(photo: CreatePhotoDto) {
-        return this.photoRepository.create({id: uuidv4(), ...photo});
+        return this.photoRepository.create({id: uuid4(), ...photo});
     }
 
     async uploadToEntity(file: Buffer) {
         if (!file) {
             throw new InternalServerErrorException('No file provided');
         }
-        const photoEntity = this.photoRepository.create({id: uuidv4()});
+        const photoEntity = this.photoRepository.create({id: uuid4()});
         console.log("photoEntity", JSON.stringify(photoEntity, null, 2));
         const photo = await this.createResizedPhoto(photoEntity.id, file);
         const thumb = await this.createThumbnail(photoEntity.id, file);
@@ -54,7 +54,8 @@ export class PhotoService {
             await this.deletePhotoFs(photoEntity.id);
             await this.deleteThumbnailFs(photoEntity.id);
         } catch (error) {
-            throw new InternalServerErrorException(error.message);
+            const message = error instanceof Error ? error.message : String(error);
+            throw new InternalServerErrorException(message);
         }
         return this.photoRepository.delete(id);
     }

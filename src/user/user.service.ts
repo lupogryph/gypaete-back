@@ -5,7 +5,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {User} from "./entities/user.entity";
 import {Repository} from "typeorm";
 import * as crypto from "node:crypto";
-import {ConfigType} from "@nestjs/config";
+import type {ConfigType} from "@nestjs/config";
 import appConfig from "../config/app.config";
 
 @Injectable()
