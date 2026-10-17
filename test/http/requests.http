@@ -1,0 +1,141 @@
+@email = lupogryph@gmail.com
+
+### Login
+POST {{url}}/auth
+Content-Type: application/x-www-form-urlencoded
+
+email = {{email}}
+    &
+password = Passw0rd
+
+> {%
+    client.global.set("token", response.body.access_token);
+%}
+
+### Get user
+GET {{url}}/auth
+Authorization: Bearer {{token}}
+
+> {%
+    client.global.set("id", response.body.id);
+%}
+
+### Get my details
+GET {{url}}/user
+Authorization: Bearer {{token}}
+
+### Update user
+PATCH {{url}}/user
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Delete user
+DELETE {{url}}/user
+Authorization: Bearer {{token}}
+
+### Admin : Create user
+POST {{url}}/admin/user
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "email": "admin@mail.ch",
+  "firstName": "Important",
+  "name": "Admin",
+  "password": "Passw0rd!",
+  "role": "admin"
+}
+
+> {%
+    client.global.set("n_email", response.body.email);
+    client.global.set("n_id", response.body.id);
+%}
+
+### Admin : Get my details
+GET {{url}}/admin/user
+Authorization: Bearer {{token}}
+
+### Admin : Get user details by ID
+GET {{url}}/admin/user/{{n_id}}
+Authorization: Bearer {{token}}
+
+### Admin : Update user
+PATCH {{url}}/admin/user/{{n_id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "email": "admin@mail.ch",
+  "firstName": "Simple",
+  "name": "User",
+  "password": "!Passw0rd",
+  "role": "user"
+}
+
+### Admin : Delete user
+DELETE {{url}}/admin/user/{{n_id}}
+Authorization: Bearer {{token}}
+
+### Chalet create
+POST {{url}}/chalet
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Chalet infos
+GET {{url}}/chalet
+
+### Chalet Update
+PATCH {{url}}/chalet
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Chalet delete
+DELETE {{url}}/chalet
+Authorization: Bearer {{token}}
+
+### Chalet upload photo
+PUT {{url}}/chalet/photo
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data
+
+### Chalet add photo
+POST {{url}}/chalet/photo
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Gallery space infos
+GET {{url}}/photo/space
+
+### Gallery delete photo
+DELETE {{url}}/photo/{{id}}
+Authorization: Bearer {{token}}
+
+### Chambres create
+POST {{url}}/chambres
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Chambre list infos
+GET {{url}}/chambres
+
+### Chambre infos by ID
+GET {{url}}/chambres/{{id}}
+
+### Chambre update
+PATCH {{url}}/chambres/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### Chambre delete
+DELETE {{url}}/chambres/{{id}}
+Authorization: Bearer {{token}}
+
+### Chambre upload photo
+PUT {{url}}/chambres/{{id}}/photo
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data
+
+### Chambre add photo
+POST {{url}}/chambres/{{id}}/photo
+Authorization: Bearer {{token}}
+Content-Type: application/json

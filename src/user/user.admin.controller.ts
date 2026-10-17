@@ -40,8 +40,8 @@ export class UserAdminController {
         return this.userService.update(id, updateUserDto);
     }
 
-    @Delete(':email')
-    remove(@Param('email') id: number) {
+    @Delete(':id')
+    remove(@Param('id') id: number) {
         return this.userService.remove(id);
     }
 }
