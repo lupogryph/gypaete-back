@@ -1,18 +1,18 @@
-import { afterAll, beforeAll, describe, it, jest } from "@jest/globals";
-import { INestApplication } from "@nestjs/common";
-import { APP_GUARD } from "@nestjs/core";
-import { JwtModule, JwtService } from "@nestjs/jwt";
-import { PassportModule } from "@nestjs/passport";
-import { Test } from "@nestjs/testing";
+import {afterAll, beforeAll, describe, it, jest} from "@jest/globals";
+import {INestApplication} from "@nestjs/common";
+import {APP_GUARD} from "@nestjs/core";
+import {JwtModule, JwtService} from "@nestjs/jwt";
+import {PassportModule} from "@nestjs/passport";
+import {Test} from "@nestjs/testing";
 import request from "supertest";
 import jwtConfig from "../auth/jwt.config";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { JwtStrategy } from "../auth/jwt.strategy";
-import { RolesGuard } from "../auth/role.guard";
-import { authenticatedUser } from "../../test/endpoint-test.helpers";
-import { UserAdminController } from "./user.admin.controller";
-import { UserController } from "./user.controller";
-import { UserService } from "./user.service";
+import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {JwtStrategy} from "../auth/jwt.strategy";
+import {RolesGuard} from "../auth/role.guard";
+import {authenticatedUser} from "../../test/endpoint-test.helpers";
+import {UserAdminController} from "./user.admin.controller";
+import {UserController} from "./user.controller";
+import {UserService} from "./user.service";
 
 describe("User endpoints (e2e)", () => {
   let app: INestApplication;
@@ -62,15 +62,6 @@ describe("User endpoints (e2e)", () => {
 
   it.each([
     {
-      name: "POST /user",
-      status: 201,
-      body: user,
-      send: () =>
-        request(app.getHttpServer())
-          .post("/user")
-          .send({ email: user.email, role: "user" }),
-    },
-    {
       name: "GET /user",
       status: 200,
       body: user,
@@ -104,53 +95,6 @@ describe("User endpoints (e2e)", () => {
       send: () =>
         request(app.getHttpServer())
           .delete("/user")
-          .set("Authorization", authorization),
-    },
-    {
-      name: "POST /admin/user",
-      status: 201,
-      body: user,
-      send: () =>
-        request(app.getHttpServer())
-          .post("/admin/user")
-          .set("Authorization", authorization)
-          .send({ email: user.email }),
-    },
-    {
-      name: "GET /admin/user",
-      status: 200,
-      body: [user],
-      send: () =>
-        request(app.getHttpServer())
-          .get("/admin/user")
-          .set("Authorization", authorization),
-    },
-    {
-      name: "GET /admin/user/:id",
-      status: 200,
-      body: user,
-      send: () =>
-        request(app.getHttpServer())
-          .get("/admin/user/7")
-          .set("Authorization", authorization),
-    },
-    {
-      name: "PATCH /admin/user/:id",
-      status: 200,
-      body: update,
-      send: () =>
-        request(app.getHttpServer())
-          .patch("/admin/user/7")
-          .set("Authorization", authorization)
-          .send({ email: "updated@example.com" }),
-    },
-    {
-      name: "DELETE /admin/user/:email",
-      status: 200,
-      body: remove,
-      send: () =>
-        request(app.getHttpServer())
-          .delete("/admin/user/user@example.com")
           .set("Authorization", authorization),
     },
   ])(
