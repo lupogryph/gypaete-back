@@ -10,12 +10,11 @@ import {ChaletModule} from "./chalet/chalet.module";
 import {TarifsModule} from "./tarifs/tarifs.module";
 import {PhotoModule} from "./photo/photo.module";
 import {ChambresModule} from './chambres/chambres.module';
-import { ContactModule } from './contact/contact.module';
-import { SocialModule } from './social/social.module';
+import {ContactModule} from './contact/contact.module';
+import {SocialModule} from './social/social.module';
 import appConfig from "./config/app.config";
 import * as classTransformer from 'class-transformer';
 import {APP_INTERCEPTOR, Reflector} from "@nestjs/core";
-import { ReservationModule } from './reservation/reservation.module';
 
 @Module({
     imports: [
@@ -33,7 +32,6 @@ import { ReservationModule } from './reservation/reservation.module';
         ChambresModule,
         ContactModule,
         SocialModule,
-        ReservationModule,
     ],
     providers: [
         {

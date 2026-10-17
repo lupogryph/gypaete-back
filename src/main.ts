@@ -27,7 +27,7 @@ async function bootstrap() {
 
     // swagger
     logger.log(`Mode: ${process.env.MODE}`);
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.MODE === 'DEV') {
         const {DocumentBuilder, SwaggerModule} = await import('@nestjs/swagger');
         const config = new DocumentBuilder()
             .setTitle(appConfig.name)
@@ -39,7 +39,7 @@ async function bootstrap() {
             extraModels: [],
         });
         SwaggerModule.setup('api', app, document);
-        console.log("Swagger init sur /api");
+        logger.log("Swagger init sur /api");
     }
 
     await app.listen(appConfig.port);
