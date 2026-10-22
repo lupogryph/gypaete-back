@@ -12,7 +12,7 @@ export class PhotoEntity {
     @Column()
     thumbnailUrl: string;
 
-    @Column('double precision')
-    size?: number;
+    @Column({type: "double precision", nullable: true})
+    size: number | null;
 
 }
