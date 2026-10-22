@@ -39,8 +39,8 @@ export class ChaletService {
     }
 
     update(id: number, updateChaletDto: UpdateChaletDto) {
-        const chalet = this.chaletRepository.create(updateChaletDto);
-        return this.chaletRepository.update(id, chalet);
+        const chalet = this.chaletRepository.create({...updateChaletDto, id});
+        return this.chaletRepository.save(chalet);
     }
 
     async remove(id: number) {

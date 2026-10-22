@@ -89,6 +89,14 @@ PATCH {{url}}/chalet
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
+{
+  "id": 1,
+  "nom": "Châlet le Gypaète",
+  "photos": [],
+  "prestations": [],
+  "nombrePersonnesBase": 12
+}
+
 ### Chalet delete
 DELETE {{url}}/chalet
 Authorization: Bearer {{token}}

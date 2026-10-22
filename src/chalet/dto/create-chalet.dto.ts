@@ -26,7 +26,7 @@ export class CreateChaletDto {
     @IsNumber()
     nombrePersonnesBase?: number;
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({type: [CreatePeriodeDto]})
     @IsOptional()
     @IsArray()
     periodes?: CreatePeriodeDto[];
