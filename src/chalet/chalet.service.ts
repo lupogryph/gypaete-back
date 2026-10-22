@@ -1,4 +1,4 @@
-import {Injectable} from "@nestjs/common";
+import {Injectable, Logger} from "@nestjs/common";
 import {CreateChaletDto} from "./dto/create-chalet.dto";
 import {UpdateChaletDto} from "./dto/update-chalet.dto";
 import {PhotoService} from "../photo/photo.service";
@@ -11,6 +11,8 @@ import {PhotoEntity} from "../photo/entities/photo.entity";
 
 @Injectable()
 export class ChaletService {
+    private readonly logger = new Logger(ChaletService.name);
+
     all_relations: FindOptionsRelations<ChaletEntity> = {
         photos: true,
         animaux: true,
@@ -42,7 +44,6 @@ export class ChaletService {
     }
 
     async remove(id: number) {
-        await this.deletePhotos(id);
         return this.chaletRepository.delete(id);
     }
 
@@ -63,19 +64,20 @@ export class ChaletService {
                 .relation(ChaletEntity, "photos")
                 .of(id)
                 .add(savedPhoto.id);
-        }).catch(error => this.photoService.deletePhoto(photo.id));
+        }).catch(error => {
+            this.logger.error(error);
+            this.photoService.deletePhoto(photo.id);
+        });
     }
 
-    // todo: maybe do this in transaction ?
-    async deletePhotos(id: number) {
-        return this.chaletRepository.findOne({
-            where: {id: id},
-            select: {photos: true},
-            relations: {photos: true}
-        })
-            .then(c => Promise.all(
-                c.photos.map(photo => this.photoService.deletePhoto(photo.id))
-            ));
+    async deletePhoto(photoId: string) {
+        return this.datasource.transaction(async manager => {
+            await this.photoService.deletePhoto(photoId);
+            await manager.createQueryBuilder()
+                .relation(ChaletEntity, "photos")
+                .of(1)
+                .remove(photoId);
+        });
     }
 
 }

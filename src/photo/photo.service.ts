@@ -1,4 +1,11 @@
-import {HttpException, Inject, Injectable, InternalServerErrorException, NotFoundException} from "@nestjs/common";
+import {
+    HttpException,
+    Inject,
+    Injectable,
+    InternalServerErrorException,
+    Logger,
+    NotFoundException
+} from "@nestjs/common";
 import {PhotoEntity} from "./entities/photo.entity";
 import {InjectRepository} from "@nestjs/typeorm";
 import {Jimp} from "jimp";
@@ -13,6 +20,8 @@ import {v4 as uuid4} from 'uuid';
 
 @Injectable()
 export class PhotoService {
+    private readonly logger = new Logger(PhotoService.name);
+
     photosPath = 'files/images/photos';
     thumbnailsPath = 'files/images/thumbnails';
 
@@ -33,7 +42,6 @@ export class PhotoService {
             throw new InternalServerErrorException('No file provided');
         }
         const photoEntity = this.photoRepository.create({id: uuid4()});
-        console.log("photoEntity", JSON.stringify(photoEntity, null, 2));
         const photo = await this.createResizedPhoto(photoEntity.id, file);
         const thumb = await this.createThumbnail(photoEntity.id, file);
         photoEntity.size = photo.size + thumb.size;
@@ -50,12 +58,14 @@ export class PhotoService {
         if (!photoEntity) {
             throw new NotFoundException(`Photo ${id} not found`);
         }
-        try {
-            await this.deletePhotoFs(photoEntity.id);
-            await this.deleteThumbnailFs(photoEntity.id);
-        } catch (error) {
-            const message = error instanceof Error ? error.message : String(error);
-            throw new InternalServerErrorException(message);
+        if (photoEntity.size) { // if image is stored locally
+            try {
+                await this.deletePhotoFs(photoEntity.id);
+                await this.deleteThumbnailFs(photoEntity.id);
+            } catch (error) {
+                const message = error instanceof Error ? error.message : String(error);
+                throw new InternalServerErrorException(message);
+            }
         }
         return this.photoRepository.delete(id);
     }

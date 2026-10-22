@@ -63,4 +63,10 @@ export class ChaletController {
         return this.chaletService.addPhoto(1, photo);
     }
 
+    @ApiBearerAuth()
+    @Delete('/photo/:id')
+    deletePhoto(@Param('id') id: string) {
+        return this.chaletService.deletePhoto(id);
+    }
+
 }

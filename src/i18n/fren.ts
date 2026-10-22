@@ -1,4 +1,5 @@
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
+import {IsOptional} from "class-validator";
 
 export class FrEn {
 
@@ -6,6 +7,7 @@ export class FrEn {
     fr: string;
 
     @ApiPropertyOptional()
-    en: string;
+    @IsOptional()
+    en?: string;
 
 }
