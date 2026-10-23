@@ -4,11 +4,11 @@ import {Temporalite} from "../../tarifs/types/temporalite.enum";
 
 export class CreatePeriodeDto {
 
-    @ApiProperty()
+    @ApiProperty({type: String, format: 'date'})
     @IsDate()
     dateDebut: Date;
 
-    @ApiProperty()
+    @ApiProperty({type: String, format: 'date'})
     @IsDate()
     dateFin: Date;
 
