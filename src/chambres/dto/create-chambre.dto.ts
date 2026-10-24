@@ -3,6 +3,7 @@ import {BainDouche} from "../types/baignoireOuDouche.enum";
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
 import {IsArray, IsBoolean, IsNumber, IsOptional, IsString, Min} from "class-validator";
 import {ConditionDto} from "../../tarifs/dto/condition.dto";
+import {PrestationPayanteDto} from "../../tarifs/dto/prestation-payante.dto";
 
 export class CreateChambreDto {
 
@@ -16,7 +17,7 @@ export class CreateChambreDto {
 
     @ApiPropertyOptional()
     @IsOptional()
-    terasse: boolean;
+    terrasse: boolean;
 
     @ApiPropertyOptional()
     @IsOptional()
@@ -89,5 +90,10 @@ export class CreateChambreDto {
     @IsOptional()
     @IsArray()
     animaux?: ConditionDto[];
+
+    @ApiPropertyOptional({type: [PrestationPayanteDto]})
+    @IsOptional()
+    @IsArray()
+    prestationsPayantes?: PrestationPayanteDto[];
 
 }

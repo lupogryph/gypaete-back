@@ -35,7 +35,7 @@ export class ChambreEntity {
     lits: LitChambreEntity[];
 
     @Column({default: false})
-    terasse: boolean;
+    terrasse: boolean;
 
     @Column({default: false})
     balcon: boolean;
