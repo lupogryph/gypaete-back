@@ -1,6 +1,5 @@
 import {Injectable} from '@nestjs/common';
 import {CreateChambreDto} from './dto/create-chambre.dto';
-import {UpdateChambreDto} from './dto/update-chambre.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {ChambreEntity} from "./entities/chambre.entity";
 import {DataSource, Repository} from "typeorm";
@@ -30,8 +29,8 @@ export class ChambresService {
     ) {
     }
 
-    create(createChambreDto: CreateChambreDto) {
-        const chambre = this.repository.create(createChambreDto);
+    create(dto: CreateChambreDto) {
+        const chambre = this.repository.create(dto);
         return this.repository.save(chambre);
     }
 
@@ -43,9 +42,9 @@ export class ChambresService {
         return this.repository.findOne({where: {numero: numero}, relations: this.all_relations});
     }
 
-    update(numero: number, updateChambreDto: UpdateChambreDto) {
-        const chambre = this.repository.create(updateChambreDto);
-        return this.repository.update(numero, chambre);
+    update(numero: number, dto: CreateChambreDto) {
+        const chambre = this.repository.create({...dto, numero});
+        return this.repository.save(chambre);
     }
 
     remove(numero: number) {
@@ -76,15 +75,14 @@ export class ChambresService {
         }
     }
 
-    async deletePhotos(numero: number) {
-        return this.repository.findOne({
-            where: {numero: numero},
-            select: {photos: true},
-            relations: {photos: true}
-        })
-            .then(c => Promise.all(
-                c.photos.map(photo => this.photoService.deletePhoto(photo.id))
-            ));
+    async deletePhoto(numero: number, photoId: string) {
+        return this.datasource.transaction(async manager => {
+            await this.photoService.deletePhoto(photoId);
+            await manager.createQueryBuilder()
+                .relation(ChambreEntity, "photos")
+                .of(numero)
+                .remove(photoId);
+        });
     }
 
     async addLit(numero: number, litId: number) {

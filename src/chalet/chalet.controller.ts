@@ -1,7 +1,6 @@
 import {Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UseInterceptors} from "@nestjs/common";
 import {ChaletService} from "./chalet.service";
 import {CreateChaletDto} from "./dto/create-chalet.dto";
-import {UpdateChaletDto} from "./dto/update-chalet.dto";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {memoryStorage} from "multer";
 import {Express} from "express";
@@ -10,6 +9,7 @@ import {UploadDto} from "../photo/dto/upload.dto";
 import {ChaletDto} from "./dto/chalet.dto";
 import {Public} from "../auth/public.decorator";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
+import {CHALET_SINGLE_ID} from "./chalet.constants";
 
 @Controller('chalet')
 export class ChaletController {
@@ -21,8 +21,8 @@ export class ChaletController {
     @ApiOkResponse({type: ChaletDto})
     @ApiBearerAuth()
     @Post()
-    create(@Body() createChaletDto: CreateChaletDto) {
-        return this.chaletService.create(createChaletDto);
+    create(@Body() dto: CreateChaletDto) {
+        return this.chaletService.create(dto);
     }
 
     @ApiOkResponse({type: ChaletDto})
@@ -35,8 +35,8 @@ export class ChaletController {
     @ApiOkResponse({type: ChaletDto})
     @ApiBearerAuth()
     @Patch()
-    update(@Body() updateChaletDto: UpdateChaletDto) {
-        return this.chaletService.update(1, updateChaletDto);
+    update(@Body() dto: CreateChaletDto) {
+        return this.chaletService.update(CHALET_SINGLE_ID, dto);
     }
 
     @ApiBearerAuth()
@@ -54,13 +54,13 @@ export class ChaletController {
     uploadPhoto(
         @UploadedFile() file: Express.Multer.File
     ) {
-        return this.chaletService.uploadPhoto(1, file.buffer);
+        return this.chaletService.uploadPhoto(CHALET_SINGLE_ID, file.buffer);
     }
 
     @ApiBearerAuth()
     @Post('/photo')
     addPhoto(@Body() photo: CreatePhotoDto) {
-        return this.chaletService.addPhoto(1, photo);
+        return this.chaletService.addPhoto(CHALET_SINGLE_ID, photo);
     }
 
     @ApiBearerAuth()

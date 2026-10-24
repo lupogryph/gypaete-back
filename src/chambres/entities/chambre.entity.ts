@@ -1,4 +1,4 @@
-import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {PhotoEntity} from "../../photo/entities/photo.entity";
 import {FrEn} from "../../i18n/fren";
 import {BainDouche} from "../types/baignoireOuDouche.enum";
@@ -9,7 +9,7 @@ import {ConditionEntity} from "../../tarifs/entities/condition.entity";
 @Entity("chambre")
 export class ChambreEntity {
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn("increment")
     numero: number;
 
     @Column({unique: true})
@@ -18,6 +18,9 @@ export class ChambreEntity {
     @ManyToMany(() => PhotoEntity)
     @JoinTable({name: "chambre_photo"})
     photos: PhotoEntity[];
+
+    @Column({default: 1})
+    mombrePersonnes: number;
 
     @Column({default: 1})
     mombrePersonnesMax: number;

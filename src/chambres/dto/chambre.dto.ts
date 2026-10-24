@@ -6,7 +6,7 @@ import {PhotoDto} from "../../photo/dto/photo.dto";
 export class ChambreDto extends CreateChambreDto {
 
     @ApiProperty()
-    id: number;
+    numero: number;
 
     @ApiProperty({type: [PhotoDto]})
     photos: PhotoDto[];
