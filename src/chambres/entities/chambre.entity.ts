@@ -78,7 +78,7 @@ export class ChambreEntity {
     @JoinTable({name: "chambre_animaux"})
     animaux: ConditionEntity[];
 
-    @ManyToMany(() => PrestationPayanteEntity)
+    @ManyToMany(() => PrestationPayanteEntity, {cascade: true})
     @JoinTable({name: "chambre_prestation_payante"})
     prestationsPayantes: PrestationPayanteEntity[];
 

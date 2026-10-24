@@ -35,7 +35,7 @@ export class ChambresService {
     }
 
     findAll() {
-        return this.repository.find();
+        return this.repository.find({relations: this.all_relations});
     }
 
     findOne(numero: number) {
