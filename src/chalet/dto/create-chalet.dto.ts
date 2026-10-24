@@ -14,36 +14,36 @@ export class CreateChaletDto {
     @ApiPropertyOptional()
     @IsOptional()
     @IsObject()
-    description: FrEn;
+    description?: FrEn;
 
     @ApiPropertyOptional({type: [FrEn]})
     @IsOptional()
     @IsArray()
-    prestations: FrEn[];
+    prestations?: FrEn[];
 
     @ApiPropertyOptional()
     @IsOptional()
     @IsNumber()
-    nombrePersonnesBase: number;
+    nombrePersonnesBase?: number;
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({type: [CreatePeriodeDto]})
     @IsOptional()
     @IsArray()
-    periodes: CreatePeriodeDto[];
+    periodes?: CreatePeriodeDto[];
 
     @ApiPropertyOptional()
     @IsOptional()
     @IsBoolean()
-    animauxAutorises: boolean;
+    animauxAutorises?: boolean;
 
     @ApiPropertyOptional({type: [ConditionDto]})
     @IsOptional()
     @IsArray()
-    animaux: ConditionDto[];
+    animaux?: ConditionDto[];
 
     @ApiPropertyOptional({type: [PrestationPayanteDto]})
     @IsOptional()
     @IsArray()
-    prestationsPayantes: PrestationPayanteDto[];
+    prestationsPayantes?: PrestationPayanteDto[];
 
 }

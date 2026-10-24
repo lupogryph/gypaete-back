@@ -1,5 +1,5 @@
-import {Column, Entity, ManyToOne, PrimaryColumn} from 'typeorm';
 import type {Relation} from 'typeorm'
+import {Column, Entity, ManyToOne, PrimaryColumn} from 'typeorm';
 import {ChaletEntity} from "./chalet.entity";
 import {Temporalite} from "../../tarifs/types/temporalite.enum";
 
@@ -12,7 +12,7 @@ export class PeriodeEntity {
     @Column({type: 'date'})
     dateFin: Date;
 
-    @Column({default: 0})
+    @Column({type: "double precision", default: 0})
     cout: number;
 
     @Column({type: "enum", enum: Temporalite, default: Temporalite.Semaine})

@@ -11,7 +11,7 @@ export class ConditionEntity {
     @Column({type: "json"})
     condition: FrEn;
 
-    @Column()
+    @Column({type: "double precision", nullable: true})
     cout: number;
 
     @Column({type: "enum", enum: Temporalite, default: null, nullable: true})
