@@ -18,10 +18,6 @@ export class CreateChambreDto extends CreateChaletDto {
 
     @ApiPropertyOptional()
     @IsOptional()
-    lits: any; // todo: LitDto[]; // Assuming you have a LitDto defined somewhere
-
-    @ApiPropertyOptional()
-    @IsOptional()
     terasse: boolean;
 
     @ApiPropertyOptional()

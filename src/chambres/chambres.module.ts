@@ -4,11 +4,10 @@ import {ChambresController} from './chambres.controller';
 import {ChambreEntity} from "./entities/chambre.entity";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {LitChambreEntity} from "./entities/lit-chambre.entity";
-import {LitEntity} from "./entities/lit.entity";
 import {PhotoModule} from "../photo/photo.module";
 
 @Module({
-    imports: [PhotoModule, TypeOrmModule.forFeature([ChambreEntity, LitEntity, LitChambreEntity])],
+    imports: [PhotoModule, TypeOrmModule.forFeature([ChambreEntity, LitChambreEntity])],
     controllers: [ChambresController],
     providers: [ChambresService],
 })

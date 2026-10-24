@@ -2,13 +2,14 @@ import {Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, Us
 import {ChambresService} from './chambres.service';
 import {CreateChambreDto} from './dto/create-chambre.dto';
 import {UpdateChambreDto} from './dto/update-chambre.dto';
-import {ApiBearerAuth, ApiBody, ApiConsumes} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse} from "@nestjs/swagger";
 import {UploadDto} from "../photo/dto/upload.dto";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {memoryStorage} from "multer";
 import {Express} from "express";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {Public} from "../auth/public.decorator";
+import {ChambreDto} from "./dto/chambre.dto";
 
 @Controller('chambres')
 export class ChambresController {
@@ -16,24 +17,28 @@ export class ChambresController {
     }
 
     @ApiBearerAuth()
+    @ApiOkResponse({type: ChambreDto})
     @Post()
     create(@Body() createChambreDto: CreateChambreDto) {
         return this.chambresService.create(createChambreDto);
     }
 
     @Public()
+    @ApiOkResponse({type: ChambreDto, isArray: true})
     @Get()
     findAll() {
         return this.chambresService.findAll();
     }
 
     @Public()
+    @ApiOkResponse({type: ChambreDto})
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.chambresService.findOne(+id);
     }
 
     @ApiBearerAuth()
+    @ApiCreatedResponse({type: ChambreDto})
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateChambreDto: UpdateChambreDto) {
         return this.chambresService.update(+id, updateChambreDto);

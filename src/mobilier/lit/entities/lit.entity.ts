@@ -1,5 +1,5 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {LitChambreEntity} from "./lit-chambre.entity";
+import {LitChambreEntity} from "../../../chambres/entities/lit-chambre.entity";
 
 @Entity("lit")
 export class LitEntity {

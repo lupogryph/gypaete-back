@@ -1,7 +1,7 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryColumn} from "typeorm";
 import type {Relation} from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryColumn} from "typeorm";
 import {ChambreEntity} from "./chambre.entity";
-import {LitEntity} from "./lit.entity";
+import {LitEntity} from "../../mobilier/lit/entities/lit.entity";
 
 @Entity("lit_chambre")
 export class LitChambreEntity {
