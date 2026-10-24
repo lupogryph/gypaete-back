@@ -8,6 +8,7 @@ import {PhotoService} from "../photo/photo.service";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {PhotoEntity} from "../photo/entities/photo.entity";
 import {FindOptionsRelations} from "typeorm/find-options/FindOptionsRelations";
+import {LitChambreEntity} from "./entities/lit-chambre.entity";
 
 @Injectable()
 export class ChambresService {
@@ -22,6 +23,8 @@ export class ChambresService {
     constructor(
         @InjectRepository(ChambreEntity)
         private repository: Repository<ChambreEntity>,
+        @InjectRepository(LitChambreEntity)
+        private litsChambresRepository: Repository<LitChambreEntity>,
         private datasource: DataSource,
         private readonly photoService: PhotoService
     ) {
@@ -33,13 +36,7 @@ export class ChambresService {
     }
 
     findAll() {
-        return this.repository.createQueryBuilder()
-            .leftJoinAndSelect(q =>
-                    q.from(PhotoEntity, "photo")
-                        .orderBy("photo.order", "ASC").limit(1),
-                "photos",
-                "photos.chambreId = chambre.id")
-            .getMany();
+        return this.repository.find();
     }
 
     findOne(numero: number) {
@@ -79,7 +76,6 @@ export class ChambresService {
         }
     }
 
-    // todo : maybe do this in transaction ?
     async deletePhotos(numero: number) {
         return this.repository.findOne({
             where: {numero: numero},
@@ -89,5 +85,20 @@ export class ChambresService {
             .then(c => Promise.all(
                 c.photos.map(photo => this.photoService.deletePhoto(photo.id))
             ));
+    }
+
+    async addLit(numero: number, litId: number) {
+        const litChambre = this.litsChambresRepository.create({
+            chambreNumero: numero,
+            litId: litId,
+        });
+        return this.litsChambresRepository.save(litChambre);
+    }
+
+    async deleteLit(numero: number, litId: number) {
+        return this.litsChambresRepository.delete({
+            chambreNumero: numero,
+            litId: litId,
+        })
     }
 }

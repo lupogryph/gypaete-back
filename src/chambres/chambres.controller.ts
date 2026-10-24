@@ -67,4 +67,16 @@ export class ChambresController {
     addPhoto(@Param('id') id: number, @Body() photo: CreatePhotoDto) {
         return this.chambresService.addPhoto(id, photo);
     }
+
+    @ApiBearerAuth()
+    @Put('/:numero/lit/:litId')
+    addLit(@Param('numero') numero: number, @Param('litId') litId: number) {
+        return this.chambresService.addLit(+numero, +litId);
+    }
+
+    @ApiBearerAuth()
+    @Delete('/:numero/lit/:litId')
+    removeLit(@Param('numero') numero: number, @Param('litId') litId: number) {
+        return this.chambresService.deleteLit(+numero, +litId);
+    }
 }
