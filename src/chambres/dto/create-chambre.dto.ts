@@ -1,7 +1,6 @@
 import {FrEn} from "../../i18n/fren";
-import {BainDouche} from "../types/baignoireOuDouche.enum";
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
-import {IsArray, IsBoolean, IsNumber, IsOptional, IsString, Min} from "class-validator";
+import {IsArray, IsBoolean, IsNumber, IsObject, IsOptional, IsString, Min} from "class-validator";
 import {ConditionDto} from "../../tarifs/dto/condition.dto";
 import {PrestationPayanteDto} from "../../tarifs/dto/prestation-payante.dto";
 
@@ -10,6 +9,21 @@ export class CreateChambreDto {
     @ApiProperty()
     @IsString()
     nom: string;
+
+    @ApiPropertyOptional()
+    @IsNumber()
+    @Min(1)
+    mombrePersonnes: number;
+
+    @ApiPropertyOptional()
+    @IsNumber()
+    @Min(1)
+    mombrePersonnesMax: number;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsObject()
+    description?: FrEn;
 
     @ApiPropertyOptional()
     @IsOptional()
@@ -33,9 +47,13 @@ export class CreateChambreDto {
     @IsNumber()
     salleDeBain: number;
 
-    @ApiPropertyOptional({enum: BainDouche, enumName: "BainDoucheEnum"})
+    @ApiPropertyOptional()
     @IsOptional()
-    bainDouche: BainDouche;
+    baignoire: boolean;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    douche: boolean;
 
     @ApiPropertyOptional()
     @IsOptional()
@@ -57,32 +75,6 @@ export class CreateChambreDto {
 
     @ApiPropertyOptional()
     @IsOptional()
-    @IsNumber()
-    nuitSupplementaireMinimum: number;
-
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsNumber()
-    @Min(0)
-    nuitSupplementaireCout: number;
-
-    @ApiPropertyOptional()
-    @IsNumber()
-    @Min(1)
-    mombrePersonnes: number;
-
-    @ApiPropertyOptional()
-    @IsNumber()
-    @Min(1)
-    mombrePersonnesMax: number;
-
-    @ApiPropertyOptional({type: [ConditionDto]})
-    @IsOptional()
-    @IsArray()
-    personnesSupplementaires: ConditionDto[];
-
-    @ApiPropertyOptional()
-    @IsOptional()
     @IsBoolean()
     animauxAutorises?: boolean;
 
@@ -95,5 +87,25 @@ export class CreateChambreDto {
     @IsOptional()
     @IsArray()
     prestationsPayantes?: PrestationPayanteDto[];
+
+    @ApiProperty()
+    @IsNumber()
+    @Min(0)
+    cout: number;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsNumber()
+    plusNuitMinimum: number;
+
+    @ApiPropertyOptional({type: [PrestationPayanteDto]})
+    @IsOptional()
+    @IsArray()
+    plusNuit: PrestationPayanteDto[];
+
+    @ApiPropertyOptional({type: [ConditionDto]})
+    @IsOptional()
+    @IsArray()
+    plusPersonne: ConditionDto[];
 
 }

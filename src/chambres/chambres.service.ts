@@ -7,7 +7,6 @@ import {PhotoService} from "../photo/photo.service";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {PhotoEntity} from "../photo/entities/photo.entity";
 import {FindOptionsRelations} from "typeorm/find-options/FindOptionsRelations";
-import {LitChambreEntity} from "./entities/lit-chambre.entity";
 
 @Injectable()
 export class ChambresService {
@@ -16,14 +15,14 @@ export class ChambresService {
         lits: true,
         prestationsPayantes: true,
         personnesSupplementaires: true,
-        animaux: true
+        animaux: true,
+        plusNuit: true,
+        plusPersonne: true
     };
 
     constructor(
         @InjectRepository(ChambreEntity)
         private repository: Repository<ChambreEntity>,
-        @InjectRepository(LitChambreEntity)
-        private litsChambresRepository: Repository<LitChambreEntity>,
         private datasource: DataSource,
         private readonly photoService: PhotoService
     ) {
@@ -86,17 +85,16 @@ export class ChambresService {
     }
 
     async addLit(numero: number, litId: number) {
-        const litChambre = this.litsChambresRepository.create({
-            chambreNumero: numero,
-            litId: litId,
-        });
-        return this.litsChambresRepository.save(litChambre);
+        return this.datasource.createQueryBuilder()
+            .relation(ChambreEntity, "lits")
+            .of(numero)
+            .add(litId);
     }
 
     async deleteLit(numero: number, litId: number) {
-        return this.litsChambresRepository.delete({
-            chambreNumero: numero,
-            litId: litId,
-        })
+        return this.datasource.createQueryBuilder()
+            .relation(ChambreEntity, "lits")
+            .of(numero)
+            .remove(litId);
     }
 }
