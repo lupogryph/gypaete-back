@@ -1,6 +1,6 @@
 import {ApiProperty} from "@nestjs/swagger";
 import {CreateChambreDto} from "./create-chambre.dto";
-import {LitDto} from "../../mobilier/lit/dto/lit.dto";
+import {LitChambreDto} from "./lit-chambre.dto";
 import {PhotoDto} from "../../photo/dto/photo.dto";
 
 export class ChambreDto extends CreateChambreDto {
@@ -11,7 +11,7 @@ export class ChambreDto extends CreateChambreDto {
     @ApiProperty({type: [PhotoDto]})
     photos: PhotoDto[];
 
-    @ApiProperty({type: [LitDto]})
-    lits: LitDto[];
+    @ApiProperty({type: [LitChambreDto]})
+    lits: LitChambreDto[];
 
 }

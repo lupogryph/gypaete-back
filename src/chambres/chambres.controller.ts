@@ -9,6 +9,7 @@ import {Express} from "express";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {Public} from "../auth/public.decorator";
 import {ChambreDto} from "./dto/chambre.dto";
+import {AddLitDto} from "./dto/add-lit.dto";
 
 @Controller('chambres')
 export class ChambresController {
@@ -18,8 +19,8 @@ export class ChambresController {
     @ApiBearerAuth()
     @ApiOkResponse({type: ChambreDto})
     @Post()
-    create(@Body() createChambreDto: CreateChambreDto) {
-        return this.chambresService.create(createChambreDto);
+    create(@Body() dto: CreateChambreDto) {
+        return this.chambresService.create(dto);
     }
 
     @Public()
@@ -39,8 +40,8 @@ export class ChambresController {
     @ApiBearerAuth()
     @ApiCreatedResponse({type: ChambreDto})
     @Patch(':numero')
-    update(@Param('numero') numero: number, @Body() updateChambreDto: CreateChambreDto) {
-        return this.chambresService.update(+numero, updateChambreDto);
+    update(@Param('numero') numero: number, @Body() dto: CreateChambreDto) {
+        return this.chambresService.update(+numero, dto);
     }
 
     @ApiBearerAuth()
@@ -75,8 +76,12 @@ export class ChambresController {
 
     @ApiBearerAuth()
     @Put('/:numero/lit/:litId')
-    addLit(@Param('numero') numero: number, @Param('litId') litId: number) {
-        return this.chambresService.addLit(+numero, +litId);
+    addLit(
+        @Param('numero') numero: number,
+        @Param('litId') litId: number,
+        @Body() addLitDto: AddLitDto
+    ) {
+        return this.chambresService.addLit(+numero, +litId, addLitDto?.nombre ?? 1);
     }
 
     @ApiBearerAuth()

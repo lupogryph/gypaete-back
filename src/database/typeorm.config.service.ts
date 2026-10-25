@@ -8,6 +8,7 @@ import {PrestationPayanteEntity} from "../tarifs/entities/prestation-payante.ent
 import {ConditionEntity} from "../tarifs/entities/condition.entity";
 import databaseConfig from "./database.config";
 import {ChambreEntity} from "../chambres/entities/chambre.entity";
+import {LitChambreEntity} from "../chambres/entities/lit-chambre.entity";
 import {LitEntity} from "../mobilier/lit/entities/lit.entity";
 import {PeriodeEntity} from "../chalet/entities/periode.entity";
 import {ContactEntity} from "../contact/entities/contact.entity";
@@ -33,6 +34,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
                 ChaletEntity,
                 PeriodeEntity,
                 ChambreEntity,
+                LitChambreEntity,
                 LitEntity,
                 PhotoEntity,
                 ConditionEntity,

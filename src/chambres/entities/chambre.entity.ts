@@ -1,9 +1,9 @@
-import {Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {PhotoEntity} from "../../photo/entities/photo.entity";
 import {FrEn} from "../../i18n/fren";
 import {PrestationPayanteEntity} from "../../tarifs/entities/prestation-payante.entity";
 import {ConditionEntity} from "../../tarifs/entities/condition.entity";
-import {LitEntity} from "../../mobilier/lit/entities/lit.entity";
+import {LitChambreEntity} from "./lit-chambre.entity";
 
 @Entity("chambre")
 export class ChambreEntity {
@@ -30,13 +30,8 @@ export class ChambreEntity {
     @Column({default: false})
     pmr: boolean;
 
-    @ManyToMany(() => LitEntity)
-    @JoinTable({
-        name: "lit_chambre",
-        joinColumn: {name: "chambreNumero", referencedColumnName: "numero"},
-        inverseJoinColumn: {name: "litId", referencedColumnName: "id"},
-    })
-    lits: LitEntity[];
+    @OneToMany(() => LitChambreEntity, (litChambre) => litChambre.chambre)
+    lits: LitChambreEntity[];
 
     @Column({default: false})
     terrasse: boolean;

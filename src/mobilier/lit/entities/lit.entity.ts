@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {LitChambreEntity} from "../../../chambres/entities/lit-chambre.entity";
 
 @Entity("lit")
 export class LitEntity {
@@ -11,5 +12,8 @@ export class LitEntity {
 
     @Column({nullable: true})
     largeur: number;
+
+    @OneToMany(() => LitChambreEntity, (litChambre) => litChambre.lit)
+    chambres: LitChambreEntity[];
 
 }
