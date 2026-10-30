@@ -1,14 +1,14 @@
 import {Body, Controller, Delete, Get, Param, Patch, Post, Put, UploadedFile, UseInterceptors} from '@nestjs/common';
 import {ChambresService} from './chambres.service';
 import {CreateChambreDto} from './dto/create-chambre.dto';
-import {UpdateChambreDto} from './dto/update-chambre.dto';
-import {ApiBearerAuth, ApiBody, ApiConsumes} from "@nestjs/swagger";
+import {ApiBearerAuth, ApiBody, ApiConsumes, ApiCreatedResponse, ApiOkResponse} from "@nestjs/swagger";
 import {UploadDto} from "../photo/dto/upload.dto";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {memoryStorage} from "multer";
 import {Express} from "express";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {Public} from "../auth/public.decorator";
+import {ChambreDto} from "./dto/chambre.dto";
 
 @Controller('chambres')
 export class ChambresController {
@@ -16,50 +16,61 @@ export class ChambresController {
     }
 
     @ApiBearerAuth()
+    @ApiOkResponse({type: ChambreDto})
     @Post()
-    create(@Body() createChambreDto: CreateChambreDto) {
-        return this.chambresService.create(createChambreDto);
+    create(@Body() dto: CreateChambreDto) {
+        return this.chambresService.create(dto);
     }
 
     @Public()
+    @ApiOkResponse({type: ChambreDto, isArray: true})
     @Get()
     findAll() {
         return this.chambresService.findAll();
     }
 
     @Public()
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.chambresService.findOne(+id);
+    @ApiOkResponse({type: ChambreDto})
+    @Get(':numero')
+    findOne(@Param('numero') numero: number) {
+        return this.chambresService.findOne(+numero);
     }
 
     @ApiBearerAuth()
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updateChambreDto: UpdateChambreDto) {
-        return this.chambresService.update(+id, updateChambreDto);
+    @ApiCreatedResponse({type: ChambreDto})
+    @Patch(':numero')
+    update(@Param('numero') numero: number, @Body() dto: CreateChambreDto) {
+        return this.chambresService.update(+numero, dto);
     }
 
     @ApiBearerAuth()
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.chambresService.remove(+id);
+    @Delete(':numero')
+    remove(@Param('numero') numero: number) {
+        return this.chambresService.remove(+numero);
     }
 
     @ApiBearerAuth()
     @ApiConsumes("multipart/form-data")
     @ApiBody({description: "photo", type: UploadDto})
     @UseInterceptors(FileInterceptor('file', {storage: memoryStorage()}))
-    @Put('/:id/photo')
+    @Put('/:numero/photo')
     uploadPhoto(
-        @Param('id') id: number,
+        @Param('numero') numero: number,
         @UploadedFile() file: Express.Multer.File
     ) {
-        return this.chambresService.uploadPhoto(id, file.buffer);
+        return this.chambresService.uploadPhoto(numero, file.buffer);
     }
 
     @ApiBearerAuth()
-    @Post('/:id/photo')
-    addPhoto(@Param('id') id: number, @Body() photo: CreatePhotoDto) {
-        return this.chambresService.addPhoto(id, photo);
+    @Post('/:numero/photo')
+    addPhoto(@Param('numero') numero: number, @Body() photo: CreatePhotoDto) {
+        return this.chambresService.addPhoto(numero, photo);
     }
+
+    @ApiBearerAuth()
+    @Delete('/:numero/photo/:photoId')
+    deletePhoto(@Param('numero') numero: number, @Param('photoId') photoId: string) {
+        return this.chambresService.deletePhoto(numero, photoId);
+    }
+
 }

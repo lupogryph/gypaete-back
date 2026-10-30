@@ -1,11 +1,21 @@
 import {FrEn} from "../../i18n/fren";
-import {BainDouche} from "../types/baignoireOuDouche.enum";
-import {ApiPropertyOptional} from "@nestjs/swagger";
-import {IsArray, IsNumber, IsOptional, Min} from "class-validator";
+import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
+import {IsArray, IsBoolean, IsNumber, IsObject, IsOptional, IsString, Min, ValidateNested} from "class-validator";
+import {Type} from "class-transformer";
 import {ConditionDto} from "../../tarifs/dto/condition.dto";
-import {CreateChaletDto} from "../../chalet/dto/create-chalet.dto";
+import {PrestationPayanteDto} from "../../tarifs/dto/prestation-payante.dto";
+import {LitChambreDto} from "./lit-chambre.dto";
 
-export class CreateChambreDto extends CreateChaletDto {
+export class CreateChambreDto {
+
+    @ApiProperty()
+    @IsString()
+    nom: string;
+
+    @ApiPropertyOptional()
+    @IsNumber()
+    @Min(1)
+    mombrePersonnes: number;
 
     @ApiPropertyOptional()
     @IsNumber()
@@ -14,15 +24,23 @@ export class CreateChambreDto extends CreateChaletDto {
 
     @ApiPropertyOptional()
     @IsOptional()
+    @IsObject()
+    description?: FrEn;
+
+    @ApiPropertyOptional({type: [LitChambreDto]})
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({each: true})
+    @Type(() => LitChambreDto)
+    lits?: LitChambreDto[];
+
+    @ApiPropertyOptional()
+    @IsOptional()
     pmr: boolean;
 
     @ApiPropertyOptional()
     @IsOptional()
-    lits: any; // todo: LitDto[]; // Assuming you have a LitDto defined somewhere
-
-    @ApiPropertyOptional()
-    @IsOptional()
-    terasse: boolean;
+    terrasse: boolean;
 
     @ApiPropertyOptional()
     @IsOptional()
@@ -38,9 +56,13 @@ export class CreateChambreDto extends CreateChaletDto {
     @IsNumber()
     salleDeBain: number;
 
-    @ApiPropertyOptional({enum: BainDouche})
+    @ApiPropertyOptional()
     @IsOptional()
-    bainDouche: BainDouche;
+    baignoire: boolean;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    douche: boolean;
 
     @ApiPropertyOptional()
     @IsOptional()
@@ -62,18 +84,37 @@ export class CreateChambreDto extends CreateChaletDto {
 
     @ApiPropertyOptional()
     @IsOptional()
-    @IsNumber()
-    nuitSupplementaireMinimum: number;
-
-    @ApiPropertyOptional()
-    @IsOptional()
-    @IsNumber()
-    @Min(0)
-    nuitSupplementaireCout: number;
+    @IsBoolean()
+    animauxAutorises?: boolean;
 
     @ApiPropertyOptional({type: [ConditionDto]})
     @IsOptional()
     @IsArray()
-    personnesSupplementaires: ConditionDto[];
+    animaux?: ConditionDto[];
+
+    @ApiPropertyOptional({type: [PrestationPayanteDto]})
+    @IsOptional()
+    @IsArray()
+    prestationsPayantes?: PrestationPayanteDto[];
+
+    @ApiProperty()
+    @IsNumber()
+    @Min(0)
+    cout: number;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsNumber()
+    plusNuitMinimum: number;
+
+    @ApiPropertyOptional({type: [PrestationPayanteDto]})
+    @IsOptional()
+    @IsArray()
+    plusNuit: PrestationPayanteDto[];
+
+    @ApiPropertyOptional({type: [ConditionDto]})
+    @IsOptional()
+    @IsArray()
+    plusPersonne: ConditionDto[];
 
 }

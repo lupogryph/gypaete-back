@@ -1,6 +1,5 @@
 import {Injectable, Logger} from "@nestjs/common";
 import {CreateChaletDto} from "./dto/create-chalet.dto";
-import {UpdateChaletDto} from "./dto/update-chalet.dto";
 import {PhotoService} from "../photo/photo.service";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ChaletEntity} from "./entities/chalet.entity";
@@ -8,6 +7,7 @@ import {DataSource, Repository} from "typeorm";
 import {FindOptionsRelations} from "typeorm/find-options/FindOptionsRelations";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {PhotoEntity} from "../photo/entities/photo.entity";
+import {CHALET_SINGLE_ID} from "./chalet.constants";
 
 @Injectable()
 export class ChaletService {
@@ -28,9 +28,9 @@ export class ChaletService {
     ) {
     }
 
-    create(createChaletDto: CreateChaletDto) {
-        const chalet = this.chaletRepository.create(createChaletDto);
-        chalet.id = 1;
+    create(dto: CreateChaletDto) {
+        const chalet = this.chaletRepository.create(dto);
+        chalet.id = CHALET_SINGLE_ID;
         return this.chaletRepository.save(chalet);
     }
 
@@ -38,8 +38,8 @@ export class ChaletService {
         return this.chaletRepository.findOne({where: {id: id}, relations: this.all_relations});
     }
 
-    update(id: number, updateChaletDto: UpdateChaletDto) {
-        const chalet = this.chaletRepository.create({...updateChaletDto, id});
+    update(id: number, dto: CreateChaletDto) {
+        const chalet = this.chaletRepository.create({...dto, id});
         return this.chaletRepository.save(chalet);
     }
 
@@ -75,7 +75,7 @@ export class ChaletService {
             await this.photoService.deletePhoto(photoId);
             await manager.createQueryBuilder()
                 .relation(ChaletEntity, "photos")
-                .of(1)
+                .of(CHALET_SINGLE_ID)
                 .remove(photoId);
         });
     }

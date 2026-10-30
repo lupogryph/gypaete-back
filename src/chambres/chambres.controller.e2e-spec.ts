@@ -1,9 +1,9 @@
-import { afterAll, beforeAll, describe, it, jest } from "@jest/globals";
-import { INestApplication } from "@nestjs/common";
+import {afterAll, beforeAll, describe, it, jest} from "@jest/globals";
+import {INestApplication} from "@nestjs/common";
 import request from "supertest";
-import { ChambresController } from "./chambres.controller";
-import { ChambresService } from "./chambres.service";
-import { createEndpointApp } from "../../test/endpoint-test.helpers";
+import {ChambresController} from "./chambres.controller";
+import {ChambresService} from "./chambres.service";
+import {createEndpointApp} from "../../test/endpoint-test.helpers";
 
 describe("Chambres endpoints (e2e)", () => {
   let app: INestApplication;
@@ -21,6 +21,7 @@ describe("Chambres endpoints (e2e)", () => {
     remove: resolves(remove),
     uploadPhoto: resolves(photo),
     addPhoto: resolves(photo),
+    addLit: resolves({chambreNumero: 2, litId: 1, nombre: 1}),
   };
 
   beforeAll(async () => {
@@ -86,6 +87,13 @@ describe("Chambres endpoints (e2e)", () => {
         request(app.getHttpServer())
           .post("/chambres/2/photo")
           .send({ url: "photo.jpg" }),
+    },
+    {
+      name: "PUT /chambres/:numero/lit/:litId",
+      status: 200,
+      body: {chambreNumero: 2, litId: 1, nombre: 1},
+      send: () =>
+          request(app.getHttpServer()).put("/chambres/2/lit/1"),
     },
   ])(
     "$name returns its status and response body",
