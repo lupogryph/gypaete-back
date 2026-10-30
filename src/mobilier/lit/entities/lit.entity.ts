@@ -13,7 +13,7 @@ export class LitEntity {
     @Column({nullable: true})
     largeur: number;
 
-    @OneToMany(() => LitChambreEntity, (litChambre) => litChambre.lit)
+    @OneToMany(() => LitChambreEntity, (litChambre) => litChambre.lit, {cascade: ["remove", "update"]})
     chambres: LitChambreEntity[];
 
 }

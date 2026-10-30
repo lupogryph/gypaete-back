@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable} from '@nestjs/common';
 import {CreateChambreDto} from './dto/create-chambre.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {ChambreEntity} from "./entities/chambre.entity";
@@ -8,6 +8,7 @@ import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {PhotoEntity} from "../photo/entities/photo.entity";
 import {FindOptionsRelations} from "typeorm/find-options/FindOptionsRelations";
 import {LitChambreEntity} from "./entities/lit-chambre.entity";
+import {LitChambreDto} from "./dto/lit-chambre.dto";
 
 @Injectable()
 export class ChambresService {
@@ -32,8 +33,14 @@ export class ChambresService {
     }
 
     create(dto: CreateChambreDto) {
-        const chambre = this.repository.create(dto);
-        return this.repository.save(chambre);
+        return this.datasource.transaction(async (manager) => {
+            const {lits, ...chambreDto} = dto;
+            const chambre = await manager.save(manager.create(ChambreEntity, chambreDto));
+            if (lits !== undefined) {
+                await this.syncLits(manager, chambre.numero, lits);
+            }
+            return chambre;
+        });
     }
 
     findAll() {
@@ -45,8 +52,16 @@ export class ChambresService {
     }
 
     update(numero: number, dto: CreateChambreDto) {
-        const chambre = this.repository.create({...dto, numero});
-        return this.repository.save(chambre);
+        return this.datasource.transaction(async (manager) => {
+            const {lits, ...chambreDto} = dto;
+            const chambre = await manager.save(
+                manager.create(ChambreEntity, {...chambreDto, numero}),
+            );
+            if (lits !== undefined) {
+                await this.syncLits(manager, numero, lits);
+            }
+            return chambre;
+        });
     }
 
     remove(numero: number) {
@@ -87,19 +102,36 @@ export class ChambresService {
         });
     }
 
-    async addLit(numero: number, litId: number, nombre = 1) {
-        const litChambre = this.litsChambresRepository.create({
-            chambreNumero: numero,
-            litId,
-            nombre,
-        });
-        return this.litsChambresRepository.save(litChambre);
-    }
+    private async syncLits(
+        manager: DataSource["manager"],
+        chambreNumero: number,
+        lits: LitChambreDto[],
+    ) {
+        const litRepository = manager.getRepository(LitChambreEntity);
+        const existingLits = await litRepository.findBy({chambreNumero});
+        const desiredLits = new Map<number, LitChambreDto>();
 
-    async deleteLit(numero: number, litId: number) {
-        return this.litsChambresRepository.delete({
-            chambreNumero: numero,
-            litId,
-        });
+        for (const lit of lits) {
+            if (desiredLits.has(lit.litId)) {
+                throw new BadRequestException(`Duplicate litId in lits: ${lit.litId}`);
+            }
+            desiredLits.set(lit.litId, lit);
+        }
+
+        const removedLits = existingLits.filter((lit) => !desiredLits.has(lit.litId));
+        if (removedLits.length > 0) {
+            await litRepository.remove(removedLits);
+        }
+
+        const updatedLits = lits.map((lit) =>
+            litRepository.create({
+                chambreNumero,
+                litId: lit.litId,
+                nombre: lit.nombre,
+            }),
+        );
+        if (updatedLits.length > 0) {
+            await litRepository.save(updatedLits);
+        }
     }
 }

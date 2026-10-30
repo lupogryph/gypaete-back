@@ -9,7 +9,6 @@ import {Express} from "express";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {Public} from "../auth/public.decorator";
 import {ChambreDto} from "./dto/chambre.dto";
-import {AddLitDto} from "./dto/add-lit.dto";
 
 @Controller('chambres')
 export class ChambresController {
@@ -74,19 +73,4 @@ export class ChambresController {
         return this.chambresService.deletePhoto(numero, photoId);
     }
 
-    @ApiBearerAuth()
-    @Put('/:numero/lit/:litId')
-    addLit(
-        @Param('numero') numero: number,
-        @Param('litId') litId: number,
-        @Body() addLitDto: AddLitDto
-    ) {
-        return this.chambresService.addLit(+numero, +litId, addLitDto?.nombre ?? 1);
-    }
-
-    @ApiBearerAuth()
-    @Delete('/:numero/lit/:litId')
-    removeLit(@Param('numero') numero: number, @Param('litId') litId: number) {
-        return this.chambresService.deleteLit(+numero, +litId);
-    }
 }

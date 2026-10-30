@@ -1,8 +1,10 @@
 import {FrEn} from "../../i18n/fren";
 import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
-import {IsArray, IsBoolean, IsNumber, IsObject, IsOptional, IsString, Min} from "class-validator";
+import {IsArray, IsBoolean, IsNumber, IsObject, IsOptional, IsString, Min, ValidateNested} from "class-validator";
+import {Type} from "class-transformer";
 import {ConditionDto} from "../../tarifs/dto/condition.dto";
 import {PrestationPayanteDto} from "../../tarifs/dto/prestation-payante.dto";
+import {LitChambreDto} from "./lit-chambre.dto";
 
 export class CreateChambreDto {
 
@@ -24,6 +26,13 @@ export class CreateChambreDto {
     @IsOptional()
     @IsObject()
     description?: FrEn;
+
+    @ApiPropertyOptional({type: [LitChambreDto]})
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({each: true})
+    @Type(() => LitChambreDto)
+    lits?: LitChambreDto[];
 
     @ApiPropertyOptional()
     @IsOptional()
