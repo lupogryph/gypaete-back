@@ -16,6 +16,7 @@ import appConfig from "./config/app.config";
 import * as classTransformer from 'class-transformer';
 import {APP_INTERCEPTOR, Reflector} from "@nestjs/core";
 import {MobilierModule} from './mobilier/mobilier.module';
+import { InfosModule } from './infos/infos.module';
 
 @Module({
     imports: [
@@ -34,6 +35,7 @@ import {MobilierModule} from './mobilier/mobilier.module';
         ContactModule,
         SocialModule,
         MobilierModule,
+        InfosModule,
     ],
     providers: [
         {
