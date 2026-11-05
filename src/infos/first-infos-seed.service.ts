@@ -23,6 +23,7 @@ export class FirstInfosSeedService implements OnApplicationBootstrap {
       phoneNumbers: [],
       email: "",
       socialNetworks: {},
+      reservationLinks: [],
     });
     this.logger.log("Created first infos record.");
   }

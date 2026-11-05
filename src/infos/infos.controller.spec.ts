@@ -10,6 +10,7 @@ describe("InfosController", () => {
     phoneNumbers: ["+33632218402"],
     email: "hello@example.com",
     socialNetworks: { facebook: "https://facebook.com/id/123456" },
+    reservationLinks: ["https://booking.example.com/chalet"],
   };
 
   it("returns InfoDto instances from endpoints that return infos", async () => {

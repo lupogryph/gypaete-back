@@ -1,17 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
-  IsArray,
   IsEmail,
+  IsArray,
   IsObject,
   IsString,
+  IsUrl,
   isURL,
   Validate,
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from "class-validator";
 
-@ValidatorConstraint({ name: "socialNetworkUrls", async: false })
-class SocialNetworkUrlsConstraint implements ValidatorConstraintInterface {
+@ValidatorConstraint({ name: "urlMap", async: false })
+class UrlMapConstraint implements ValidatorConstraintInterface {
   validate(value: unknown): boolean {
     return (
       value !== null &&
@@ -25,7 +26,7 @@ class SocialNetworkUrlsConstraint implements ValidatorConstraintInterface {
   }
 
   defaultMessage(): string {
-    return "socialNetworks must be an object with URL string values";
+    return "must be an object with URL string values";
   }
 }
 
@@ -52,6 +53,15 @@ export class CreateInfoDto {
     },
   })
   @IsObject()
-  @Validate(SocialNetworkUrlsConstraint)
+  @Validate(UrlMapConstraint)
   socialNetworks: Record<string, string>;
+
+  @ApiProperty({
+    type: [String],
+    format: "uri",
+    example: ["https://booking.example.com/chalet"],
+  })
+  @IsArray()
+  @IsUrl({ require_protocol: true }, { each: true })
+  reservationLinks: string[];
 }

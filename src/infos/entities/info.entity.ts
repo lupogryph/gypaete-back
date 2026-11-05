@@ -16,4 +16,7 @@ export class Info {
 
   @Column({ type: "json" })
   socialNetworks: Record<string, string>;
+
+  @Column({ type: "json", default: "[]" })
+  reservationLinks: string[];
 }
