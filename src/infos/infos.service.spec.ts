@@ -30,6 +30,7 @@ describe("InfosService", () => {
       phoneNumbers: ["+33632218402"],
       email: "hello@example.com",
       socialNetworks: { facebook: "https://facebook.com/id/123456" },
+      reservationLinks: ["https://booking.example.com/chalet"],
     };
     const entity = { ...dto, id: 1 };
     repository.create.mockReturnValue(entity);
@@ -47,6 +48,7 @@ describe("InfosService", () => {
       phoneNumbers: [],
       email: "hello@example.com",
       socialNetworks: {},
+      reservationLinks: [],
     };
     const updated = { ...existing, postal: "New address" };
     repository.findOneBy.mockResolvedValue(existing);
