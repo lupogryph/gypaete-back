@@ -10,6 +10,7 @@ import {PhotoModule} from "../photo/photo.module";
     imports: [PhotoModule, TypeOrmModule.forFeature([ChambreEntity, LitChambreEntity])],
     controllers: [ChambresController],
     providers: [ChambresService],
+    exports: [ChambresService],
 })
 export class ChambresModule {
 }

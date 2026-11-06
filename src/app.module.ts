@@ -11,12 +11,12 @@ import {TarifsModule} from "./tarifs/tarifs.module";
 import {PhotoModule} from "./photo/photo.module";
 import {ChambresModule} from './chambres/chambres.module';
 import {ContactModule} from './contact/contact.module';
-import {SocialModule} from './social/social.module';
 import appConfig from "./config/app.config";
 import * as classTransformer from 'class-transformer';
 import {APP_INTERCEPTOR, Reflector} from "@nestjs/core";
 import {MobilierModule} from './mobilier/mobilier.module';
 import { InfosModule } from './infos/infos.module';
+import { PublicModule } from './public/public.module';
 
 @Module({
     imports: [
@@ -33,9 +33,9 @@ import { InfosModule } from './infos/infos.module';
         TarifsModule,
         ChambresModule,
         ContactModule,
-        SocialModule,
         MobilierModule,
         InfosModule,
+        PublicModule,
     ],
     providers: [
         {

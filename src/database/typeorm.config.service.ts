@@ -12,7 +12,6 @@ import {LitChambreEntity} from "../chambres/entities/lit-chambre.entity";
 import {LitEntity} from "../mobilier/lit/entities/lit.entity";
 import {PeriodeEntity} from "../chalet/entities/periode.entity";
 import {ContactEntity} from "../contact/entities/contact.entity";
-import {SocialEntity} from "../social/entities/social.entity";
 import {Info} from "../infos/entities/info.entity";
 import pg from 'pg';
 
@@ -41,7 +40,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
                 ConditionEntity,
                 PrestationPayanteEntity,
                 ContactEntity,
-                SocialEntity,
                 Info,
             ],
         };

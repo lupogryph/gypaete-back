@@ -9,5 +9,6 @@ import { FirstInfosSeedService } from "./first-infos-seed.service";
   imports: [TypeOrmModule.forFeature([Info])],
   controllers: [InfosController],
   providers: [InfosService, FirstInfosSeedService],
+  exports: [InfosService],
 })
 export class InfosModule {}
