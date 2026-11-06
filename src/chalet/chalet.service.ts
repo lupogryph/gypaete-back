@@ -4,7 +4,7 @@ import {PhotoService} from "../photo/photo.service";
 import {InjectRepository} from "@nestjs/typeorm";
 import {ChaletEntity} from "./entities/chalet.entity";
 import {DataSource, Repository} from "typeorm";
-import {FindOptionsRelations} from "typeorm/find-options/FindOptionsRelations";
+import type {FindOptionsRelations} from "typeorm";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {PhotoEntity} from "../photo/entities/photo.entity";
 import {CHALET_SINGLE_ID} from "./chalet.constants";

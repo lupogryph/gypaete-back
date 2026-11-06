@@ -6,7 +6,7 @@ import {DataSource, Repository} from "typeorm";
 import {PhotoService} from "../photo/photo.service";
 import {CreatePhotoDto} from "../photo/dto/create-photo.dto";
 import {PhotoEntity} from "../photo/entities/photo.entity";
-import {FindOptionsRelations} from "typeorm/find-options/FindOptionsRelations";
+import type {FindOptionsRelations} from "typeorm";
 import {LitChambreEntity} from "./entities/lit-chambre.entity";
 import {LitChambreDto} from "./dto/lit-chambre.dto";
 

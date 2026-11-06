@@ -10,6 +10,7 @@ import {FirstChaletSeedService} from "./first-chalet-seed.service";
     imports: [PhotoModule, TypeOrmModule.forFeature([ChaletEntity])],
     controllers: [ChaletController],
     providers: [ChaletService, TypeOrmModule, FirstChaletSeedService],
+    exports: [ChaletService],
 })
 export class ChaletModule {
 }
