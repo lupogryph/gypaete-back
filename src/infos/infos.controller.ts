@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
-  ParseIntPipe,
   Patch,
   Post,
 } from "@nestjs/common";
@@ -20,6 +18,7 @@ import { InfosService } from "./infos.service";
 import { CreateInfoDto } from "./dto/create-info.dto";
 import { UpdateInfoDto } from "./dto/update-info.dto";
 import { InfoDto } from "./dto/info.dto";
+import {INFOS_SINGLE_ID} from "./infos.constants";
 
 @ApiTags("infos")
 @Controller("infos")
@@ -34,33 +33,25 @@ export class InfosController {
     return plainToInstance(InfoDto, info);
   }
 
-  @ApiOkResponse({ type: InfoDto, isArray: true })
-  @Get()
-  async findAll(): Promise<InfoDto[]> {
-    const infos = await this.infosService.findAll();
-    return plainToInstance(InfoDto, infos);
-  }
-
   @ApiOkResponse({ type: InfoDto })
-  @Get(":id")
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<InfoDto> {
-    const info = await this.infosService.findOne(id);
+  @Get()
+  async find(): Promise<InfoDto> {
+    const info = await this.infosService.findOne(INFOS_SINGLE_ID);
     return plainToInstance(InfoDto, info);
   }
 
   @ApiOkResponse({ type: InfoDto })
   @ApiBody({ type: UpdateInfoDto })
-  @Patch(":id")
+  @Patch()
   async update(
-    @Param("id", ParseIntPipe) id: number,
     @Body() updateInfoDto: UpdateInfoDto,
   ): Promise<InfoDto> {
-    const info = await this.infosService.update(id, updateInfoDto);
+    const info = await this.infosService.update(INFOS_SINGLE_ID, updateInfoDto);
     return plainToInstance(InfoDto, info);
   }
 
-  @Delete(":id")
-  remove(@Param("id", ParseIntPipe) id: number) {
-    return this.infosService.remove(id);
+  @Delete()
+  remove() {
+    return this.infosService.remove(INFOS_SINGLE_ID);
   }
 }

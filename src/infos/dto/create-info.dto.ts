@@ -12,7 +12,7 @@ import {
 } from "class-validator";
 
 @ValidatorConstraint({ name: "urlMap", async: false })
-class UrlMapConstraint implements ValidatorConstraintInterface {
+export class UrlMapConstraint implements ValidatorConstraintInterface {
   validate(value: unknown): boolean {
     return (
       value !== null &&

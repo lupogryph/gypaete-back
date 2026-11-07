@@ -1,0 +1,1 @@
+export const INFOS_SINGLE_ID = 1;

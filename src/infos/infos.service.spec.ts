@@ -60,6 +60,46 @@ describe("InfosService", () => {
     expect(repository.save).toHaveBeenCalledWith(updated);
   });
 
+  it("persists all fields from a complete PATCH payload", async () => {
+    const existing = {
+      id: 1,
+      postal: "",
+      phoneNumbers: [],
+      email: "",
+      socialNetworks: {},
+      reservationLinks: [],
+    };
+    const update = {
+      postal: "880 VC N°15 Dite de la Culaz\n74450 Le Grand-Bornand\nFrance",
+      phoneNumbers: ["+33632218402"],
+      email: "akasha2@wanadoo.fr",
+      socialNetworks: {},
+      reservationLinks: [],
+    };
+    const updated = { ...existing, ...update };
+    repository.findOneBy.mockResolvedValue(existing);
+    repository.save.mockResolvedValue(updated);
+
+    await expect(service.update(1, update)).resolves.toEqual(updated);
+    expect(repository.save).toHaveBeenCalledWith(updated);
+  });
+
+  it("rejects an empty PATCH instead of returning an unchanged record", async () => {
+    repository.findOneBy.mockResolvedValue({
+      id: 1,
+      postal: "",
+      phoneNumbers: [],
+      email: "",
+      socialNetworks: {},
+      reservationLinks: [],
+    });
+
+    await expect(service.update(1, {})).rejects.toThrow(
+      "At least one info field must be provided",
+    );
+    expect(repository.save).not.toHaveBeenCalled();
+  });
+
   it("does not allow reading or mutating another id", async () => {
     await expect(service.findOne(2)).rejects.toThrow("Info 2 not found");
     await expect(service.update(2, { postal: "Address" })).rejects.toThrow(
