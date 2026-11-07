@@ -701,7 +701,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrestationPayanteDto'
-        mombrePersonnesMax:
+        nombrePersonnesMax:
           type: number
         pmr:
           type: boolean
@@ -769,7 +769,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PrestationPayanteDto'
-        mombrePersonnesMax:
+        nombrePersonnesMax:
           type: number
         pmr:
           type: boolean

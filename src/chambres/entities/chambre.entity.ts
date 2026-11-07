@@ -19,10 +19,10 @@ export class ChambreEntity {
     photos: PhotoEntity[];
 
     @Column({default: 1})
-    mombrePersonnes: number;
+    nombrePersonnes: number;
 
     @Column({default: 1})
-    mombrePersonnesMax: number;
+    nombrePersonnesMax: number;
 
     @Column({type: "json", nullable: true})
     description: FrEn;

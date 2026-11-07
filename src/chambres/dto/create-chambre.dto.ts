@@ -15,12 +15,12 @@ export class CreateChambreDto {
     @ApiPropertyOptional()
     @IsNumber()
     @Min(1)
-    mombrePersonnes: number;
+    nombrePersonnes: number;
 
     @ApiPropertyOptional()
     @IsNumber()
     @Min(1)
-    mombrePersonnesMax: number;
+    nombrePersonnesMax: number;
 
     @ApiPropertyOptional()
     @IsOptional()
