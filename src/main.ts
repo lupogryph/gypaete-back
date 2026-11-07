@@ -2,10 +2,10 @@ import {NestFactory} from "@nestjs/core";
 import {AppModule} from "./app.module";
 import {Logger, ValidationPipe} from "@nestjs/common";
 import {ConfigService} from "@nestjs/config";
-import * as path from "node:path";
 import {NestExpressApplication} from "@nestjs/platform-express";
 import * as classTransformer from 'class-transformer';
 import * as classValidator from 'class-validator';
+import {filesDirectory} from "./files-directory";
 
 async function bootstrap() {
     const logger = new Logger('Bootstrap');
@@ -23,7 +23,7 @@ async function bootstrap() {
         })
     );
 
-    app.useStaticAssets(path.join(__dirname, '..', 'files'), {prefix: '/files/'});
+    app.useStaticAssets(filesDirectory, {prefix: '/files/'});
 
     // swagger
     logger.log(`Mode: ${process.env.MODE}`);

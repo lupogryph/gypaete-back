@@ -14,6 +14,7 @@ import appConfig from "../config/app.config";
 import type {ConfigType} from "@nestjs/config";
 import * as path from "node:path";
 import {promises as fs} from "node:fs";
+import {filesDirectory} from "../files-directory";
 import {CreatePhotoDto} from "./dto/create-photo.dto";
 import {SpaceDto} from "./dto/space.dto";
 import {v4 as uuid4} from 'uuid';
@@ -22,8 +23,8 @@ import {v4 as uuid4} from 'uuid';
 export class PhotoService {
     private readonly logger = new Logger(PhotoService.name);
 
-    photosPath = 'files/images/photos';
-    thumbnailsPath = 'files/images/thumbnails';
+    photosPath = 'images/photos';
+    thumbnailsPath = 'images/thumbnails';
 
     constructor(
         @InjectRepository(PhotoEntity)
@@ -48,8 +49,8 @@ export class PhotoService {
         if (!(await this.canUploadPhoto(photoEntity.size))) {
             throw new HttpException('Not enough space to upload photo', 507); // Insufficient Storage
         }
-        photoEntity.url = `${this.baseUrl()}/${photo.path}`;
-        photoEntity.thumbnailUrl = `${this.baseUrl()}/${thumb.path}`;
+        photoEntity.url = `${this.config.public_url}/${photo.path}`;
+        photoEntity.thumbnailUrl = `${this.config.public_url}/${thumb.path}`;
         return photoEntity;
     }
 
@@ -71,12 +72,12 @@ export class PhotoService {
     }
 
     async deletePhotoFs(id: string) {
-        const filePath = path.join(__dirname, '..', this.photosPath, `${id}.jpg`);
+        const filePath = path.join(filesDirectory, this.photosPath, `${id}.jpg`);
         return this.deleteIfExists(filePath);
     }
 
     async deleteThumbnailFs(id: string) {
-        const filePath = path.join(__dirname, '..', this.thumbnailsPath, `${id}.jpg`);
+        const filePath = path.join(filesDirectory, this.thumbnailsPath, `${id}.jpg`);
         return this.deleteIfExists(filePath);
     }
 
@@ -85,30 +86,29 @@ export class PhotoService {
     }
 
     async createResizedPhoto(name: string, file: Buffer) {
-        const path = `${this.photosPath}/${name}.jpg`
+        const photoPath = `files/${this.photosPath}/${name}.jpg`;
+        const filePath = path.join(filesDirectory, this.photosPath, `${name}.jpg`);
         const image = await Jimp.read(file);
         if (image.height > 1024 || image.width > 1024) {
             image.resize(image.height >= image.height ? {w: 1024} : {h: 1024}); // Resize based on height or width
         }
         const size = await this.getImageSizeInKB(image);
-        const save = image.write(`${this.photosPath}/${name}.jpg`);
-        return {path: path, size: size};
+        await fs.mkdir(path.dirname(filePath), {recursive: true});
+        await image.write(`${filesDirectory}/${this.photosPath}/${name}.jpg`);
+        return {path: photoPath, size: size};
     }
 
     async createThumbnail(name: string, file: Buffer) {
-        const path = `${this.thumbnailsPath}/${name}.jpg`
+        const thumbnailPath = `files/${this.thumbnailsPath}/${name}.jpg`;
+        const filePath = path.join(filesDirectory, this.thumbnailsPath, `${name}.jpg`);
         const image = await Jimp.read(file);
         if (image.height > 320) {
             image.resize({h: 320}); // Resize to 320px height, auto width
         }
         const size = await this.getImageSizeInKB(image);
-        const save = image.write(`${this.thumbnailsPath}/${name}.jpg`);
-        return {path: path, size: size};
-    }
-
-    baseUrl(): string {
-        const protocol = this.config.https ? 'https' : 'http';
-        return `${protocol}://${this.config.host}:${this.config.port}`;
+        await fs.mkdir(path.dirname(filePath), {recursive: true});
+        await image.write(`${filesDirectory}/${this.thumbnailsPath}/${name}.jpg`);
+        return {path: thumbnailPath, size: size};
     }
 
     async getImageSizeInKB(image: any) {
