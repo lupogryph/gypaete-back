@@ -70,7 +70,7 @@ export class ChambreEntity {
     @Column({default: false})
     animauxAutorises: boolean;
 
-    @ManyToMany(() => ConditionEntity)
+    @ManyToMany(() => ConditionEntity, {cascade: ["insert"]})
     @JoinTable({name: "chambre_animaux"})
     animaux: ConditionEntity[];
 

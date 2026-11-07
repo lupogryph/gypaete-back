@@ -1,12 +1,15 @@
 import type {Relation} from 'typeorm'
-import {Column, Entity, ManyToOne, PrimaryColumn} from 'typeorm';
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {ChaletEntity} from "./chalet.entity";
 import {Temporalite} from "../../tarifs/types/temporalite.enum";
 
 @Entity("periode")
 export class PeriodeEntity {
 
-    @PrimaryColumn({type: 'date'})
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({type: 'date'})
     dateDebut: Date;
 
     @Column({type: 'date'})

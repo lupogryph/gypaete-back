@@ -35,7 +35,11 @@ export class ChaletService {
     }
 
     findOne(id: number) {
-        return this.chaletRepository.findOne({where: {id: id}, relations: this.all_relations});
+        return this.chaletRepository.findOne({
+            where: {id: id},
+            relations: this.all_relations,
+            order: {periodes: {dateDebut: "ASC"}}
+        });
     }
 
     update(id: number, dto: CreateChaletDto) {

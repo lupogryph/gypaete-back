@@ -4,6 +4,9 @@ import {CreatePeriodeDto} from "./create-periode.dto";
 
 export class PeriodeDto extends CreatePeriodeDto {
 
+    @ApiProperty()
+    id: number;
+
     @ApiProperty({enum: Temporalite, enumName: 'Temporalite'})
     par: Temporalite;
 
